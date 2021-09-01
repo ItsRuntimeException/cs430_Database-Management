@@ -1,0 +1,40 @@
+Script started on Mon 29 Apr 2019 01:28:54 AM EDT
+runlin@pe07:~/cs630/hw4$ mysql
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 250
+Server version: 5.7.22-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> source m[Kquery3_mysql.sql
++---------------------------+-------+--------------+
+| name                      | stars | review_count |
++---------------------------+-------+--------------+
+| Rachel's Kitchen          |   3.5 |          252 |
+| LULU Hawaiian BBQ 2       |   3.5 |           56 |
+| Arby's                    |   2.5 |           35 |
+| Port of Subs              |     3 |           34 |
+| Timbers - Durango         |   2.5 |           90 |
+| Market Grille Cafe        |     4 |          428 |
+| El Pollo Loco             |   2.5 |           62 |
+| Babystacks Cafe           |     4 |          437 |
+| China One                 |   3.5 |          200 |
+| Popeyes Louisiana Kitchen |     2 |           88 |
++---------------------------+-------+--------------+
+10 rows in set (0.17 sec)
+
+mysql> exit
+Bye
+runlin@pe07:~/cs630/hw4$ exit
+exit
+
+Script done on Mon 29 Apr 2019 01:29:15 AM EDT

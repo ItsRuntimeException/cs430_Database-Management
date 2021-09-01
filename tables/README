@@ -1,0 +1,49 @@
+Load scripts
+dbbook.sh: Load sample tables into Oracle, on host pe07.cs.umb.edu
+
+Requires that sqlplus is available at the command line
+Usage: sh dbbook.sh
+
+See oracle.script for a typescript of a load, after dropping
+a previous load. Similarly mysql.script.
+
+Load script for mysql
+
+dbbook_mysql.sh: Load sample tables into mysql, on host pe07.cs.umb.edu.
+  First, make a 4-line file .my.cnf in your login directory with your
+  mysql password, like this, with xxxx replaced by your password 
+  and yyyy by your mysql database name.  
+[client]
+password=xxxx
+[mysql]
+database=yyyy
+
+This way, you can use "mysql -u username" to login to your database,
+without entering a password, and can load the database without multiple 
+password inputs. The .my.cnf file should be protected: "chmod og-r .my.cnf"
+
+Note: The mysql user needs FILE privilege to execute the "load data infile"
+mysql command, and the file needs to be under /var/local/cs634, which has
+been configured as OK for mysql to access in AppArmor (Ubuntu's
+file security daemon).  Your mysql account has FILE privilege.
+
+Usage: sh dbbook_mysql.sh
+
+Scripts used by top-level scripts described above:
+
+load_mysql.sh: use the mysql bulk load command to load a csv 
+(comma-separated-value) file with optionally quoted strings 
+("foo" instead of foo for a column value).
+
+load_sailors.sh: Like load_mysql.sh, but additionally arranges
+that nullstring rating values in the data file turn into
+null values in the table.
+
+load_reserves.sh: Like load_mysql.sh, but specifies to mysql
+how to interpret 10/10/1996, etc., as a DATE.
+
+Note: table "class" has a row that has null values. For
+this table, an insert is used from dbbook.sh and dbbook_mysql.sh,
+showing another way to get nulls in place, portably. But note that
+this method is useful only when such rows are rare, since inserts are
+more costly than row bulk loads.
