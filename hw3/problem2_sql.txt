@@ -1,0 +1,222 @@
+Script started on Tue 02 Apr 2019 12:50:20 AM EDT
+runlin@itserver6:~/cs630/hw3$ exitsqlplus runlin/runlin@//dbs3.cs.umb.edu/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Tue Apr 2 00:50:21 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Tue Apr 02 2019 00:30:57 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> @problem2.sql
+SQL> 
+SQL> -- Exercise_6 Ch.4
+SQL> -- Write a SELECT statement that returns two columns from the General_Ledger_Accounts table:
+SQL> -- account_number and account_description. The result set should have one row for each account number
+SQL> -- that has never been used. Sort the final result set account_number.
+SQL> -- Hint: Use an outer join to the Invoice_Line_Items table.
+SQL> 
+SQL> SELECT gl.account_number, gl.account_description
+  2  FROM general_ledger_accounts gl
+  3  LEFT OUTER JOIN
+  4  invoice_line_items il
+  5  ON gl.account_number = il.account_number
+  6  WHERE il.account_number IS NULL
+  7  ORDER BY gl.account_number;
+
+ACCOUNT_NUMBER ACCOUNT_DESCRIPTION
+-------------- --------------------------------------------------
+	   100 Cash
+	   110 Accounts Receivable
+	   150 Furniture
+	   160 Computer Equipment
+	   162 Capitalized Lease
+	   167 Software
+	   170 Other Equipment
+	   181 Book Development
+	   200 Accounts Payable
+	   205 Royalties Payable
+	   230 Sales Taxes Payable
+
+ACCOUNT_NUMBER ACCOUNT_DESCRIPTION
+-------------- --------------------------------------------------
+	   234 Medicare Taxes Payable
+	   237 State Payroll Taxes Payable
+	   238 Employee FICA Taxes Payable
+	   239 Employer FICA Taxes Payable
+	   241 Employer FUTA Taxes Payable
+	   242 Employee SDI Taxes Payable
+	   243 Employer UCI Taxes Payable
+	   251 IBM Credit Corporation Payable
+	   280 Capital Stock
+	   290 Retained Earnings
+	   300 Retail Sales
+
+ACCOUNT_NUMBER ACCOUNT_DESCRIPTION
+-------------- --------------------------------------------------
+	   301 College Sales
+	   302 Trade Sales
+	   306 Consignment Sales
+	   310 Compositing Revenue
+	   394 Book Club Royalties
+	   400 Book Printing Costs
+	   403 Book Production Costs
+	   500 Salaries and Wages
+	   505 FICA
+	   506 FUTA
+	   507 UCI
+
+ACCOUNT_NUMBER ACCOUNT_DESCRIPTION
+-------------- --------------------------------------------------
+	   508 Medicare
+	   521 Utilities
+	   528 IBM Lease
+	   532 Equipment Rental
+	   550 Packaging Materials
+	   551 Business Forms
+	   555 Collection Agency Fees
+	   556 Credit Card Handling
+	   565 Bank Fees
+	   568 Auto License Fee
+	   576 PC Software
+
+ACCOUNT_NUMBER ACCOUNT_DESCRIPTION
+-------------- --------------------------------------------------
+	   582 Travel and Accomodations
+	   590 Business Insurance
+	   610 Charitable Contributions
+	   611 Profit Sharing Contributions
+	   620 Interest Paid to Banks
+	   621 Other Interest
+	   630 Federal Corporation Income Taxes
+	   631 State Corporation Income Taxes
+	   632 Sales Tax
+
+53 rows selected.
+
+SQL> 
+SQL> 
+SQL> -- Exercise_3 Ch.6
+SQL> -- write a SELECT statement that returns two columns from the General_Ledger_Accounts table:
+SQL> -- account_number and account_description. The result set should have one row for each account number
+SQL> -- that has never been used. Use a subquery introduced with the NOT EXISTS opertor,
+SQL> -- and sort the result set by account_number.
+SQL> 
+SQL> SELECT gl.account_number, gl.account_description
+  2  FROM general_ledger_accounts gl
+  3  WHERE NOT EXISTS (
+  4  	 SELECT *
+  5  	 FROM invoice_line_items il
+  6  	 WHERE gl.account_number = il.account_number
+  7  	 AND il.account_number IS NULL
+  8  )
+  9  ORDER BY gl.account_number;
+
+ACCOUNT_NUMBER ACCOUNT_DESCRIPTION
+-------------- --------------------------------------------------
+	   100 Cash
+	   110 Accounts Receivable
+	   120 Book Inventory
+	   150 Furniture
+	   160 Computer Equipment
+	   162 Capitalized Lease
+	   167 Software
+	   170 Other Equipment
+	   181 Book Development
+	   200 Accounts Payable
+	   205 Royalties Payable
+
+ACCOUNT_NUMBER ACCOUNT_DESCRIPTION
+-------------- --------------------------------------------------
+	   221 401K Employee Contributions
+	   230 Sales Taxes Payable
+	   234 Medicare Taxes Payable
+	   235 Income Taxes Payable
+	   237 State Payroll Taxes Payable
+	   238 Employee FICA Taxes Payable
+	   239 Employer FICA Taxes Payable
+	   241 Employer FUTA Taxes Payable
+	   242 Employee SDI Taxes Payable
+	   243 Employer UCI Taxes Payable
+	   251 IBM Credit Corporation Payable
+
+ACCOUNT_NUMBER ACCOUNT_DESCRIPTION
+-------------- --------------------------------------------------
+	   280 Capital Stock
+	   290 Retained Earnings
+	   300 Retail Sales
+	   301 College Sales
+	   302 Trade Sales
+	   306 Consignment Sales
+	   310 Compositing Revenue
+	   394 Book Club Royalties
+	   400 Book Printing Costs
+	   403 Book Production Costs
+	   500 Salaries and Wages
+
+ACCOUNT_NUMBER ACCOUNT_DESCRIPTION
+-------------- --------------------------------------------------
+	   505 FICA
+	   506 FUTA
+	   507 UCI
+	   508 Medicare
+	   510 Group Insurance
+	   520 Building Lease
+	   521 Utilities
+	   522 Telephone
+	   523 Building Maintenance
+	   527 Computer Equipment Maintenance
+	   528 IBM Lease
+
+ACCOUNT_NUMBER ACCOUNT_DESCRIPTION
+-------------- --------------------------------------------------
+	   532 Equipment Rental
+	   536 Card Deck Advertising
+	   540 Direct Mail Advertising
+	   541 Space Advertising
+	   546 Exhibits and Shows
+	   548 Web Site Production and Fees
+	   550 Packaging Materials
+	   551 Business Forms
+	   552 Postage
+	   553 Freight
+	   555 Collection Agency Fees
+
+ACCOUNT_NUMBER ACCOUNT_DESCRIPTION
+-------------- --------------------------------------------------
+	   556 Credit Card Handling
+	   565 Bank Fees
+	   568 Auto License Fee
+	   569 Auto Expense
+	   570 Office Supplies
+	   572 Books, Dues, and Subscriptions
+	   574 Business Licenses and Taxes
+	   576 PC Software
+	   580 Meals
+	   582 Travel and Accomodations
+	   589 Outside Services
+
+ACCOUNT_NUMBER ACCOUNT_DESCRIPTION
+-------------- --------------------------------------------------
+	   590 Business Insurance
+	   591 Accounting
+	   610 Charitable Contributions
+	   611 Profit Sharing Contributions
+	   620 Interest Paid to Banks
+	   621 Other Interest
+	   630 Federal Corporation Income Taxes
+	   631 State Corporation Income Taxes
+	   632 Sales Tax
+
+75 rows selected.
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@itserver6:~/cs630/hw3$ exit
+exit
+
+Script done on Tue 02 Apr 2019 12:50:30 AM EDT

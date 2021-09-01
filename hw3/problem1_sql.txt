@@ -1,0 +1,98 @@
+Script started on Mon 01 Apr 2019 11:56:31 PM EDT
+runlin@pe07:~/cs630/hw3$ exitsqlplus runlin/runlin@//dbs3.cs.umb.edu/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Apr 1 23:56:34 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Mon Apr 01 2019 23:36:21 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> @problem1.sql
+SQL> 
+SQL> -- a. Find parts (pids, pnames and colors) that are supplied by all suppliers.
+SQL> SELECT p.pid, p.pname, p.color
+  2  FROM parts p
+  3  WHERE NOT EXISTS ( -- look for sid(s) unconnected via c to this pid
+  4  (SELECT s.sid FROM suppliers s)
+  5  MINUS -- ones connected via c to p.sid
+  6  (SELECT c.sid FROM catalog c  WHERE c.pid=p.pid)
+  7  );
+
+       PID PNAME				    COLOR
+---------- ---------------------------------------- ---------------
+	 8 Fire Hydrant Cap			    Red
+
+SQL> 
+SQL> -- b. Find parts (pids, pnames and colors) that are supplied by all suppliers with names starting with 'A' (use sname >= 'A' and sname < 'B' for RA, LIKE for SQL).
+SQL> SELECT p.pid, p.pname, p.color
+  2  FROM parts p, suppliers s1
+  3  WHERE s1.sname LIKE 'A%' and
+  4  NOT EXISTS ( -- look for bid(s) unconnected via c to this pid
+  5  	 (SELECT s.sid FROM suppliers s)
+  6  	 MINUS -- ones connected via c to p.sid
+  7  	 (SELECT c.sid FROM catalog c  WHERE c.pid=p.pid)
+  8  );
+
+       PID PNAME				    COLOR
+---------- ---------------------------------------- ---------------
+	 8 Fire Hydrant Cap			    Red
+	 8 Fire Hydrant Cap			    Red
+
+SQL> 
+SQL> -- c. Find employees (eid and salary) certified for all aircraft of cruising range under 2000.
+SQL> SELECT distinct e.eid, e.salary
+  2  FROM employees e, certified c, aircraft a
+  3  WHERE e.eid=c.eid and a.cruisingrange<2000;
+
+       EID     SALARY
+---------- ----------
+ 552455318     101745
+ 310454876     212156
+ 548977562	84476
+ 142519864     227489
+ 574489457	   20
+ 390487451     212156
+ 274878974	99890
+ 556784565     205187
+ 574489456     105743
+ 242518965     120433
+ 355548984     212156
+
+       EID     SALARY
+---------- ----------
+ 269734834     289950
+ 567354612     256481
+ 159542516	48250
+  90873519	32021
+ 550156548     205187
+ 356187925	44740
+ 573284895     114323
+ 141582651     178345
+  11564812     153972
+
+20 rows selected.
+
+SQL> 
+SQL> -- d. Among employees (eid and salary) certified for all aircraft of cruising range under 2000, find the one(s) with maximal salary (SQL only).
+SQL> SELECT distinct e.eid, e.salary
+  2  FROM employees e, certified c, aircraft a
+  3  WHERE e.eid=c.eid and a.cruisingrange<2000 and e.salary=(
+  4  	 SELECT MAX(e2.salary)
+  5  	 FROM employees e2
+  6  );
+
+       EID     SALARY
+---------- ----------
+ 269734834     289950
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@pe07:~/cs630/hw3$ exit
+exit
+
+Script done on Mon 01 Apr 2019 11:57:02 PM EDT

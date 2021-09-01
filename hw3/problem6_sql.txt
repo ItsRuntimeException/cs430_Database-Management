@@ -1,0 +1,80 @@
+Script started on Tue 02 Apr 2019 01:59:03 AM EDT
+runlin@itserver6:~/cs630/hw3$ ls
+create_ap_tables.sql  drop-view.sql  problem1_sql.txt  problem2_sql.txt  queryview1.sql  typescript
+createview.sql	      problem1.sql   problem2.sql      problem6.sql	 queryview2.sql
+runlin@itserver6:~/cs630/hw3$ lsexitsqlplus runlin/runlin@//dbs3.cs.umb.edu/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Tue Apr 2 01:59:06 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Tue Apr 02 2019 01:26:31 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> @problem6.sql
+SQL> 
+SQL> -- Make a script problem6.sql of dropping and then creating the view,
+SQL> -- then doing the two queries. Supply the output in problem6.txt.
+SQL> 
+SQL> DROP VIEW ManagerSummary;
+
+View dropped.
+
+SQL> 
+SQL> CREATE VIEW ManagerSummary(DeptName, MgrID, MgrName, MgrSalary, empCount) AS
+  2  SELECT d.dname, d.managerid, e.ename, e.salary, COUNT(e.eid)
+  3  FROM dept d, emp e
+  4  WHERE d.managerid=e.eid
+  5  GROUP BY d.dname, d.managerid, e.ename, e.salary;
+
+View created.
+
+SQL> @queryview1.sql
+SQL> set echo ON
+SQL> 
+SQL> -- c. Query the view ManagerSummary to retrieve the set of distinct salaries of managers who manage a department called “Sales”. Put this SQL in queryview1.sql.
+SQL> -- variables: ManagerSummary(DeptName, MgrID, MgrName, MgrSalary, empCount)
+SQL> 
+SQL> SELECT DISTINCT ms.MgrSalary
+  2  FROM ManagerSummary ms
+  3  WHERE ms.DeptName = 'Sales';
+
+no rows selected
+
+SQL> @queryview2.sql
+SQL> set echo ON
+SQL> 
+SQL> -- d. Query the view ManagerSummary to find the name of the manager who manages most employees.
+SQL> -- If the same employee works in several departments, that employee is counted once in each of the departments.
+SQL> -- The manager is included in the count the same as all other employees, i.e., based on his or her records in the Works table. Put this SQL in queryview2.sql.
+SQL> -- variables: ManagerSummary(DeptName, MgrID, MgrName, MgrSalary, empCount)
+SQL> 
+SQL> SELECT ms.MgrName, ms.empCount
+  2  FROM ManagerSummary ms
+  3  WHERE ms.empCount = (
+  4  	 SELECT MAX(ms2.empCount)
+  5  	 FROM ManagerSummary ms2
+  6  );
+
+MGRNAME 			 EMPCOUNT
+------------------------------ ----------
+Mary Johnson				1
+Linda Davis				1
+Edward Baker				1
+Michael Miller				1
+Mary Johnson				1
+Donald King				1
+Barbara Wilson				1
+
+7 rows selected.
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@itserver6:~/cs630/hw3$ exit
+exit
+
+Script done on Tue 02 Apr 2019 02:00:01 AM EDT
