@@ -1,0 +1,48 @@
+1.) 	CREATE TABLE Works
+		(eid INTEGER, did INTEGER, pct_time INTEGER
+		PRIMARY KEY (eid,did),
+		FOREIGN KEY (did) REFERENCES Dept(did),
+		FOREIGN KEY (eid) REFERENCES Emp(eid));
+
+We need foreign key in place because we don't want dangling references
+to be still around when we deleted Dept tuple, so Works don't reference Dept if the did is not on Dept
+with the use of ON DELETE CASCADE.
+
+2.) 	CREATE TABLE Emp
+		(eid INTEGER, ename CHAR(20), age INTEGER, salary REAL,
+		PRIMARY KEY (eid));
+
+	CREATE TABLE Dept
+		(did INTEGER, dname CHAR(20), budget REAL, managerid INTEGER,
+		PRIMARY KEY (did));
+
+	CREATE TABLE Works
+	(eid INTEGER, did INTEGER, pct_time INTEGER
+	PRIMARY KEY (eid,did),
+	FOREIGN KEY (did) REFERENCES Dept(did) ON DELETE CASCADE,
+	FOREIGN KEY (eid) REFERENCES Emp(eid) ON DELETE CASCADE);
+
+3.)	Use of NOT NULL to guaranteed Dept has manager role.
+	managerid INTEGER NOT NULL
+
+4.)	Write an SQL statement to add John Doe as an employee with eid = 101, age = 32 and
+	salary = 15,000.
+
+	INSERT INTO Emp(eid, ename, age, salary)
+	VALUES (101, 'John Doe', 32, 15000);
+
+5.)	Write an SQL statement to give every employee a 10 percent raise.
+
+	UPDATE Emp E
+	SET E.salary = E.salary * 1.10;
+
+6.)	Write an SQL statement to delete the [Legal] department. Given the referential integrity
+	constraints you chose for this schema, explain what happens when this statement is
+	executed.
+
+	DELETE
+	FROM Dept D
+	WHERE D.dname = 'Legal';
+
+	When I execute this, the tuple of the Legal department is deleted. Since we said ON DELETE CASCADE, 
+	then the tuples from Works table that references the Legal department will be deleted also.

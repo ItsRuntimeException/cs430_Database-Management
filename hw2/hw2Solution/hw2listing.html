@@ -1,0 +1,1141 @@
+<pre>
+::::::::::::::
+problem1.txt
+::::::::::::::
+Script started on Sun 07 Oct 2018 11:54:44 AM EDT
+eoneil@pe07:~/630/hw2Solution.f18$ mysql -u eoneil1 -D eoneil1db =-^?[K[K[K-p
+Enter password: 
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 4888
+Server version: 5.7.22-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> select * from boats;
++-----+-----------+-------+
+| bid | bname     | color |
++-----+-----------+-------+
+| 101 | Interlake | blue  |
+| 102 | Interlake | red   |
+| 103 | Clipper   | green |
+| 104 | Marine    | red   |
++-----+-----------+-------+
+4 rows in set (0.00 sec)
+
+mysql> exit
+Bye
+::::::::::::::
+problem2.txt
+::::::::::::::
+Exercise 3.8 Answer each of the following questions briefly. The questions are based
+on the following relational schema:
+
+Emp(eid: integer, ename: string, age: integer, salary: real)
+Works(eid: integer, did: integer, pcttime: integer)
+Dept(did: integer, dname: string, budget: real, managerid: integer)
+
+1. Give an example of a foreign key constraint that involves the Dept relation. What
+are the options for enforcing this constraint when a user attempts to delete a Dept
+tuple?
+
+A constraint could be created such that for every did in Works there is a
+matching did in Dept.  The way to enforce this constraint is to make sure
+that the table is properly created:
+
+Note: there are two possible answers here for DELETE actions: ON DELETE
+CASCADE or the default ON DELETE NO ACTION (i.e. this text or lack of it)
+
+CREATE TABLE Works ( eid INTEGER,   
+                     did INTEGER,
+                     pct_time INTEGER,
+                     PRIMARY KEY (eid, did),
+                     FOREIGN KEY (did) REFERENCES Dept
+                                 ON DELETE CASCADE);
+
+Note that a test was performed on Oracle: [NOT REQUIRED]
+
+SQL> CREATE TABLE WorksTest ( eid INTEGER,
+                     did INTEGER,
+                     pcttime INTEGER,
+                     PRIMARY KEY (eid, did),
+                     FOREIGN KEY (did) REFERENCES Dept
+                                 ON DELETE CASCADE);
+  2    3    4    5    6     
+Table created.
+
+SQL> 
+
+The options for enforcing the constraint are:
+When a deletion of a dept row is attempte:
+1) ON DELETE CASCADE: Also delete all works tuples that refer to it.
+2) Nothing extra, or NO ACTION: Do not allow deletion if a works tuple refers to it.
+
+There are other possibilities, only briefly noted in the text (pg. 71)
+so not expected in this answer, but their inclusion is OK:
+3) ON DELETE SET DEFAULT For every works tuple that refers to it, use the default did.
+Needs a default clause in the did column definition in the create table for dept.
+4) ON DELETE SET NULL For every works tuple that refers to it, set the did field to
+null.  This one is not useful here since the did is the PK of department
+and thus cannot be null. 
+
+2. Write the SQL statements required to create the preceding relations,
+including appropriate versions of all primary and foreign key integrity
+constraints.
+
+--OK to use statements from createdb.sql here--
+
+CREATE TABLE Emp ( eid INTEGER,
+                     ename VARCHAR(20),
+                     age INTEGER,
+                     salary REAL,  -- or decimal(10,2)
+                     PRIMARY KEY (eid));
+
+CREATE TABLE Works ( eid INTEGER,
+                     did INTEGER,
+                     pct_time INTEGER,
+                     PRIMARY KEY (eid, did),
+                     CONSTRAINT Eid_FKey
+                                FOREIGN KEY (eid) REFERENCES Emp,
+                     CONSTRAINT Did_FKey
+                                FOREIGN KEY (did) REFERENCES Dept
+				                  ON DELETE CASCADE);
+
+Note: constraint names are not required, but they are a good idea.
+
+CREATE TABLE Dept ( did INTEGER,
+                    dname VARCHAR(20),
+                    budget REAL,
+                    managerid INTEGER,
+                    PRIMARY KEY (did),
+                    CONSTRAINT Man_Key
+                               FOREIGN KEY (managerid) REFERENCES Emp
+                              ON DELETE SET NULL); --or use default action
+
+Note that ON DELETE CASCADE is not wanted here: if the manager leaves
+as an employee, we don't want the whole department to be dropped!
+
+4. Write an SQL statement to add John Doe as an employee with eid = 101, age =
+32 and salary = 15, 000.
+
+INSERT INTO Emp
+VALUES (101, 'John Doe', 32, 15000);
+
+5. Write an SQL statement to give every employee a 10 percent raise.
+
+UPDATE Emp E
+SET E.salary = E.salary * 1.10;
+
+6. Write an SQL statement to delete the Toy (changed to Legal) department. Given the referential
+integrity constraints you chose for this schema, explain what happens when this
+statement is executed.
+
+DELETE
+FROM Dept D
+WHERE D.dname = 'Legal';
+
+When this statement is executed, not only will the row with the dname Legal in
+it be removed but the row(s) in Works with that did will also be removed
+because the modifier ON DELETE CASCADE was used.
+
+Further discussion, not needed in student solution: The standard load
+has 3 such rows of works, ones with 3 in the did column. This means
+that 3 employees no longer are associated with that department. 
+In fact these 3 employees now have no associated department, but there is
+no constraint requiring mandatory participation, so the database
+allows this delete to proceed. 
+
+
+::::::::::::::
+problem3.txt
+::::::::::::::
+ORACLE Results:
+
+rwilson@topcat:~/cs630/hw2$ sqlplus rwilson/rwilson@//dbs3.cs.umb.edu/dbs3 < insertnull.sql
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sun Sep 25 17:48:01 2016
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sun Sep 25 2016 17:46:32 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL>   2  
+1 row created.
+
+SQL> Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+rwilson@topcat:~/cs630/hw2$ sqlplus rwilson/rwilson@//dbs3.cs.umb.edu/dbs3 
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sun Sep 25 17:48:25 2016
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sun Sep 25 2016 17:47:00 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> select * from dept;
+
+       DID DNAME                    BUDGET  MANAGERID
+---------- -------------------- ---------- ----------
+         1 Hardware             1048572.12  141582651
+         2 Operations              4099101  287321212
+         3 Legal                 222988.13  248965255
+         4 Marketing             538099.54  548977562
+         5 Software              400011.12  141582651
+         6 Production             12099101  578875478
+         7 Shipping                      5  489456522
+         8 Acrobatics                   14
+
+8 rows selected.
+
+SQL> 
+
+
+MySQL Results:
+
+rwilson@topcat:~/cs630/hw2$ mysql -u rwilson -D rwilsondb --force  < insertnull.sql
+rwilson@topcat:~/cs630/hw2$ mysql -u rwilson -D rwilsondb
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 366
+Server version: 5.6.33-0ubuntu0.14.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> select * from dept;
++-----+------------+-------------+-----------+
+| did | dname      | budget      | managerid |
++-----+------------+-------------+-----------+
+|   1 | Hardware   |  1048572.12 | 141582651 |
+|   2 | Operations |  4099101.00 | 287321212 |
+|   3 | Legal      |   222988.13 | 248965255 |
+|   4 | Marketing  |   538099.54 | 548977562 |
+|   5 | Software   |   400011.12 | 141582651 |
+|   6 | Production | 12099101.00 | 578875478 |
+|   7 | Shipping   |        5.00 | 489456522 |
+|   8 | Acrobatics |       14.00 |      NULL |
++-----+------------+-------------+-----------+
+8 rows in set (0.00 sec)
+
+mysql> 
+::::::::::::::
+problem4.txt
+::::::::::::::
+Script started on Sat 06 Oct 2018 02:44:55 PM EDT
+eoneil@pe07:~/630/hw2Solution.f18$ sqlp[K[K[K[K!sq;
+sqlplus cs630test/cs630test@//dbs3.cs.umb.edu/dbs3;
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sat Oct 6 14:45:02 2018
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Fri Oct 05 2018 16:57:22 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> @[rp    set ecjp    jp    ho on
+SQL> @problem4.sql
+SQL> --CS 630 hw 2 Solutions: Problem 4.3 of R&G
+SQL> --Jinghui Zhou     (student name)
+SQL> --start up script on topcat or pe07
+SQL> --connect to dbs3 using sqlplus
+SQL> --use "set echo on", then run this by "@problem4.sql"
+SQL> --exit from sqlplus, then exit again to finish typescript
+SQL> --"mv typescript problem4.txt" to rename it for delivery
+SQL> -- Note: all-caps for SQL keywords is not needed
+SQL> -- But we need to capitalize color names in table parts to match data
+SQL> --[4.3 part1] Find the names of suppliers who supply some red part.
+SQL> SELECT DISTINCT s.sname
+  2  FROM suppliers s, parts p, catalog c
+  3  
+SQL> WHERE p.color='Red' AND c.pid=p.pid AND c.sid=s.sid;
+SP2-0734: unknown command beginning "WHERE p.co..." - rest of line ignored.
+SQL> 
+SQL> --Problem 2
+SQL> -- 2. Find the sids of suppliers who supply some red or green part.
+SQL> 
+SQL> SELECT DISTINCT s.sid FROM suppliers s, catalog c, parts p
+  2  where s.sid=c.sid and c.pid=p.pid and (p.color='Red' or p.color='Green');
+
+       SID
+----------
+         1
+         2
+         4
+         3
+
+SQL> 
+SQL> --Problem 3
+SQL> -- 3. Find the sids of suppliers who supply some red part or are at 221 Packer
+SQL> -- Street.
+SQL> 
+SQL> SELECT DISTINCT s.sid FROM suppliers s, catalog c, parts p
+  2  where s.sid=c.sid and c.pid=p.pid and p.color='Red'
+  3  UNION
+  4  SELECT DISTINCT s.sid FROM suppliers s
+  5  where s.address='221 Packer Ave';
+
+       SID
+----------
+         1
+         2
+         3
+         4
+
+SQL> 
+SQL> --Problem 4
+SQL> -- 4. Find the sids of suppliers who supply some red part and some green part.
+SQL> 
+SQL> SELECT DISTINCT s.sid FROM suppliers s, catalog c, parts p
+  2   where s.sid=c.sid and c.pid=p.pid and p.color='Red'
+  3   INTERSECT
+  4   SELECT DISTINCT s.sid FROM suppliers s, catalog c, parts p
+  5   where s.sid=c.sid and c.pid=p.pid and p.color='Green';
+
+       SID
+----------
+         1
+         3
+
+SQL> 
+SQL> 
+SQL> --Problem 9
+SQL> -- 9. Find pairs of sids such that the supplier with the first sid charges
+SQL> -- more for some part than the supplier with the second sid.
+SQL> 
+SQL> SELECT DISTINCT c1.sid, c2.sid from catalog c1, catalog c2
+  2  WHERE c1.sid<>c2.sid and c2.pid=c1.pid and c1.cost > c2.cost;
+
+       SID        SID
+---------- ----------
+         4          1
+         1          2
+         3          1
+         4          2
+         1          3
+         3          2
+         4          3
+
+7 rows selected.
+
+SQL> 
+SQL> --Problem 10
+SQL> -- 10. Find the pids of parts supplied by at least two different suppliers.
+SQL> 
+SQL> SELECT DISTINCT c1.pid from catalog c1, catalog c2
+  2  WHERE c1.sid!=c2.sid and c2.pid=c1.pid;
+
+       PID
+----------
+         1
+         4
+         5
+         8
+         7
+         9
+
+6 rows selected.
+
+SQL> 
+SQL> --Problem 11
+SQL> -- 11. Find the pids of the most expensive parts supplied by suppliers named
+SQL> -- Yosemite Sham.
+SQL> SELECT c.pid from catalog c, suppliers s
+  2  Where s.sname='Yosemite Sham' and c.sid=s.sid
+  3  INTERSECT
+  4  Select c1.pid from catalog c1, catalog c2
+  5  where c1.pid=c2.pid and c1.pid>c2.pid;
+
+no rows selected
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+eoneil@pe07:~/630/hw2Solution.f18$ exit
+exit
+
+Script done on Sat 06 Oct 2018 02:45:29 PM EDT
+::::::::::::::
+problem5.txt
+::::::::::::::
+Script started on Sat 06 Oct 2018 02:48:29 PM EDT
+eoneil@pe07:~/630/hw2Solution.f18$ !sq
+sqlplus cs630test/cs630test@//dbs3.cs.umb.edu/dbs3;
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sat Oct 6 14:48:33 2018
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sat Oct 06 2018 14:25:48 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> set echo on;
+SQL> @problem  5.sql
+SQL> -- 1. Find the pnames of parts for which there is some supplier.
+SQL> 
+SQL> -- there are different pid's with the same part name
+SQL> select distinct p.pname
+  2  from parts p, catalog c
+  3  where p.pid = c.pid;
+
+PNAME
+----------------------------------------
+Acme Widget Washer
+Fire Hydrant Cap
+Anti-Gravity Turbine Generator
+7 Segment Display
+I Brake for Crop Circles Sticker
+Left Handed Bacon Stretcher Cover
+Smoke Shifter End
+
+7 rows selected.
+
+SQL> 
+SQL> -- 4. Find the pnames of parts supplied by Acme Widget Suppliers and no one
+SQL> -- else.
+SQL> 
+SQL> select DISTINCT p.pname
+  2  from suppliers s, parts p, catalog c
+  3  where s.sid = c.sid AND c.pid = p.pid
+  4        AND s.sname = 'Acme Widget Suppliers'
+  5        AND p.pid NOT IN
+  6            (select p2.pid
+  7            from suppliers s2, parts p2, catalog c2
+  8            where s2.sid = c2.sid AND c2.pid = p2.pid
+  9                  AND s2.sname <> 'Acme Widget Suppliers');
+
+PNAME
+----------------------------------------
+Acme Widget Washer
+Anti-Gravity Turbine Generator
+Smoke Shifter End
+
+SQL> 
+SQL> -- 5 Find the sids of suppliers who charge more for some part than the average cost of that
+SQL> -- part (averaged over all the suppliers who supply that part).
+SQL> -- First think about average for part xpid:
+SQL> -- select avg(c1.cost) from catalog c1
+SQL> -- where c1.pid = xpid
+SQL> -- Since we have a FK from catalog to suppliers, we don't need to join to suppliers here
+SQL> --  but it's OK to do so.
+SQL> 
+SQL> select distinct sid from catalog c
+  2  where c.cost > (select avg(c1.cost) from catalog c1 where c1.pid = c.pid);
+
+       SID
+----------
+         1
+         4
+
+SQL> 
+SQL> -- 7. Find the sids of suppliers who supply only red parts.
+SQL> -- Again, joins to suppliers don't hurt.
+SQL> -- and using INTERSECT is another way
+SQL> 
+SQL> select distinct c.sid from catalog c, parts p
+  2  where c.pid = p.pid and p.color = 'Red'
+  3  and c.sid not in
+  4  (select c1.sid from catalog c1, parts p1
+  5  where c1.pid = p1.pid and p1.color <> 'Red');
+
+no rows selected
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+eoneil@pe07:~/630/hw2Solution.f18$ exit
+exit
+
+Script done on Sat 06 Oct 2018 02:48:53 PM EDT
+::::::::::::::
+problem6.txt
+::::::::::::::
+Script started on Sat 06 Oct 2018 02:51:15 PM EDT
+eoneil@pe07:~/630/hw2Solution.f18$ !sq
+sqlplus cs630test/cs630test@//dbs3.cs.umb.edu/dbs3;
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sat Oct 6 14:51:22 2018
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sat Oct 06 2018 14:29:18 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> set echo on
+SQL> @probm lem6.sql
+SQL> -- Problem 6a
+SQL> -- Find the major and the average age of students for that major, for each
+SQL> -- major. List major and average age.
+SQL> 
+SQL> select s.major, AVG(s.age)
+  2  from student s
+  3  group by s.major;
+
+MAJOR                     AVG(S.AGE)
+------------------------- ----------
+Law                               20
+Animal Science                    18
+Accounting                        19
+Mechanical Engineering            19
+Electrical Engineering            17
+Computer Science                18.5
+Computer Engineering            18.5
+Economics                         20
+Veterinary Medicine               21
+English                           21
+Civil Engineering                 21
+
+MAJOR                     AVG(S.AGE)
+------------------------- ----------
+Architecture                      22
+Finance                           18
+Kinesiology                       19
+History                           20
+Psychology                        19
+Education                         21
+
+17 rows selected.
+
+SQL> 
+SQL> -- Problem 6b
+SQL> -- For each room that has a class, find how many different departments use
+SQL> -- that room for classes.List room and count of departments.
+SQL> -- Don't report null room values.
+SQL> 
+SQL> -- count the number of departments asociated with each room
+SQL> 
+SQL> select c.room, COUNT(DISTINCT f.deptid)
+  2  from class c, faculty f
+  3  where c.fid = f.fid and c.room is not null
+  4  group by c.room;
+
+ROOM       COUNT(DISTINCTF.DEPTID)
+---------- -----------------------
+20 AVW                           3
+R128                             4
+R15                              3
+Q3                               2
+1320 DCL                         3
+R12                              2
+
+6 rows selected.
+
+SQL> 
+SQL> -- Problem 6c
+SQL> -- Display results from c. only for rooms used by 2 or more departments.
+SQL> select c.room, COUNT(DISTINCT f.deptid) AS ct
+  2       from class c, faculty f
+  3       where c.fid = f.fid and c.room is not null
+  4       group by c.room
+  5       having count(distinct f.deptid) > = 2;
+
+ROOM               CT
+---------- ----------
+20 AVW              3
+R128                4
+R15                 3
+Q3                  2
+1320 DCL            3
+R12                 2
+
+6 rows selected.
+
+SQL> 
+SQL> -- Alternatively,
+SQL> 
+SQL> select *
+  2  from (select c.room, COUNT(DISTINCT f.deptid) AS ct
+  3       from class c, faculty f
+  4       where c.fid = f.fid and c.room is not null
+  5       group by c.room)
+  6  where ct >= 2;
+
+ROOM               CT
+---------- ----------
+20 AVW              3
+R128                4
+R15                 3
+Q3                  2
+1320 DCL            3
+R12                 2
+
+6 rows selected.
+
+SQL> 
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+eoneil@pe07:~/630/hw2Solution.f18$ exit
+exit
+
+Script done on Sat 06 Oct 2018 02:51:45 PM EDT
+::::::::::::::
+problem7.txt
+::::::::::::::
+Script started on Sat 06 Oct 2018 02:53:59 PM EDT
+eoneil@pe07:~/630/hw2Solution.f18$ !sq
+sqlplus cs630test/cs630test@//dbs3.cs.umb.edu/dbs3;
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sat Oct 6 14:54:04 2018
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sat Oct 06 2018 14:32:07 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> set enc  cho on
+SQL> @problem7.sql
+SQL> -- 1. Print the names and ages of each employee who works in both the Hardware
+SQL> -- department and the Software department.
+SQL> 
+SQL> select e.ename, e.age
+  2  from emp e, works w, dept d
+  3  where e.eid = w.eid AND w.did = d.did
+  4        AND dname = 'Software'
+  5  INTERSECT
+  6  select e.ename, e.age
+  7  from emp e, works w, dept d
+  8  where e.eid = w.eid AND w.did = d.did
+  9        AND dname = 'Hardware';
+
+ENAME                                 AGE
+------------------------------ ----------
+Mary Johnson                           44
+Stanley Browne                         23
+
+SQL> 
+SQL> -- or to avoid INTERSECT:
+SQL> select e.ename, e.age from emp e
+  2  where e.eid in
+  3  (select e.eid
+  4  from emp e, works w, dept d
+  5  where e.eid = w.eid AND w.did = d.did
+  6        AND dname = 'Software')
+  7  AND e.eid in
+  8  (select e.eid
+  9  from emp e, works w, dept d
+ 10  where e.eid = w.eid AND w.did = d.did
+ 11        AND dname = 'Hardware');
+
+ENAME                                 AGE
+------------------------------ ----------
+Mary Johnson                           44
+Stanley Browne                         23
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- 3. Print the name of each employee whose salary exceeds the budget of all
+SQL> -- of the departments that he or she works in.
+SQL> 
+SQL> -- list the budgets for all the departments that employee x works in
+SQL> -- select d.budget
+SQL> -- from works w, dept d
+SQL> -- where w.did = d.did and w.eid = x
+SQL> 
+SQL> -- put this together with the employees and their salaries
+SQL> 
+SQL> select e.ename
+  2       from emp e
+  3  where e.salary >
+  4      (select max(d.budget) from works w, dept d
+  5        where w.did = d.did AND w.eid = e.eid);
+
+ENAME
+------------------------------
+Linda Davis
+
+SQL> 
+SQL> 
+SQL> -- 6. If a manager manages more than one department, he or she controls the sum of all the
+SQL> -- budgets for those departments. Find the managerids of managers who control more than
+SQL> -- $5 million.
+SQL> -- First consider one manager's (x's) total controlled budget
+SQL> -- select sum(d.budget) from dept d where d.managerid = x
+SQL> 
+SQL> select d.managerid from dept d
+  2  where 5000000 <
+  3   (select sum(d1.budget) from dept d1 where d1.managerid = d.managerid);
+
+ MANAGERID
+----------
+ 578875478
+
+SQL> 
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+eoneil@pe07:~/630/hw2Solution.f18$ exit
+exit
+
+Script done on Sat 06 Oct 2018 02:54:19 PM EDT
+::::::::::::::
+problem8FKs.txt
+::::::::::::::
+
+
+mysql> show create table yelp_db.review;
++--------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table  | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
++--------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| review | CREATE TABLE `review` (
+  `id` varchar(22) NOT NULL COMMENT '   \n',
+  `stars` int(11) DEFAULT NULL,
+  `review_date` datetime DEFAULT NULL,
+  `text` text,
+  `useful` int(11) DEFAULT NULL,
+  `funny` int(11) DEFAULT NULL,
+  `cool` int(11) DEFAULT NULL,
+  `business_id` varchar(22) NOT NULL,
+  `user_id` varchar(22) NOT NULL COMMENT '\n\n',
+  PRIMARY KEY (`id`),
+  KEY `fk_reviews_business1_idx` (`business_id`),
+  KEY `fk_reviews_user1_idx` (`user_id`),
+  CONSTRAINT `fk_reviews_business1` FOREIGN KEY (`business_id`) REFERENCES `business` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_reviews_user1` FOREIGN KEY (`user_id`) REFERENCES `yuser` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 |
++--------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> exit
+Bye
+This shows foreign keys from business_id to business.id and user_id to yuser.id
+::::::::::::::
+problem8intro.txt
+::::::::::::::
+Script started on Sat 06 Oct 2018 04:12:50 PM EDT
+eoneil@pe07:~/630/hw2Solution.f18$ !sq
+sqlplus cs630test/cs630test@//dbs3.cs.umb.edu/dbs3;
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sat Oct 6 16:12:57 2018
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sat Oct 06 2018 15:42:42 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> describe yelp_db.review;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL VARCHAR2(22)
+ STARS                                              NUMBER(10)
+ REV_DATE                                           TIMESTAMP(0)
+ TEXT                                               CLOB
+ USEFUL                                             NUMBER(10)
+ FUNNY                                              NUMBER(10)
+ COOL                                               NUMBER(10)
+ BUSINESS_ID                               NOT NULL VARCHAR2(22)
+ USER_ID                                   NOT NULL VARCHAR2(22)
+
+Non-standard SQL types: varchar2, number, clob (clob is not on Lecture04 list but is SQL-2003)
+
+SQL> describe yelp_db.yuser;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL VARCHAR2(22)
+ NAME                                               VARCHAR2(255)
+ REVIEW_COUNT                                       NUMBER(10)
+ YELPING_SINCE                                      TIMESTAMP(0)
+ USEFUL                                             NUMBER(10)
+ FUNNY                                              NUMBER(10)
+ COOL                                               NUMBER(10)
+ FANS                                               NUMBER(10)
+ AVERAGE_STARS                                      BINARY_DOUBLE
+ COMPLIMENT_HOT                                     NUMBER(10)
+ COMPLIMENT_MORE                                    NUMBER(10)
+ COMPLIMENT_PROFILE                                 NUMBER(10)
+ COMPLIMENT_CUTE                                    NUMBER(10)
+ COMPLIMENT_LIST                                    NUMBER(10)
+ COMPLIMENT_NOTE                                    NUMBER(10)
+ COMPLIMENT_PLAIN                                   NUMBER(10)
+ COMPLIMENT_COOL                                    NUMBER(10)
+ COMPLIMENT_FUNNY                                   NUMBER(10)
+ COMPLIMENT_WRITER                                  NUMBER(10)
+ COMPLIMENT_PHOTOS                                  NUMBER(10)
+
+Non-standard SQL types: varchar2, number, binary_double (though values are normal double, IEEE double)
+SQL> descrip be yelp_db.business;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL VARCHAR2(22)
+ NAME                                               VARCHAR2(255)
+ NEIGHBORHOOD                                       VARCHAR2(255)
+ ADDRESS                                            VARCHAR2(255)
+ CITY                                               VARCHAR2(255)
+ STATE                                              VARCHAR2(255)
+ POSTAL_CODE                                        VARCHAR2(255)
+ LATITUDE                                           BINARY_DOUBLE
+ LONGITUDE                                          BINARY_DOUBLE
+ STARS                                              BINARY_DOUBLE
+ REVIEW_COUNT                                       NUMBER(10)
+ IS_OPEN                                            NUMBER(3)
+
+Non-standard SQL types: varchar2, binary_double, number
+
+SQL> select count(*) fromy  yelp_db.review;
+
+  COUNT(*)
+----------
+   4720472
+
+SQL> select count(*) from yelp_db.yuser;
+
+  COUNT(*)
+----------
+   1183362
+
+SQL> select count(*) from yelp_db.business;
+
+  COUNT(*)
+----------
+    156638
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+eoneil@pe07:~/630/hw2Solution.f18$ exit
+exit
+
+Script done on Sat 06 Oct 2018 04:14:33 PM EDT
+Script started on Sat 06 Oct 2018 04:05:04 PM EDT
+eoneil@pe07:~/630/hw2Solution.f18$ mysql -u eoneil1/eoneil1[K[K[K[K[K[K[K[K[K1 -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 4644
+Server version: 5.7.22-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use yelp_db;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> describe review;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| id          | varchar(22) | NO   | PRI | NULL    |       |
+| stars       | int(11)     | YES  |     | NULL    |       |
+| review_date | datetime    | YES  |     | NULL    |       |
+| text        | text        | YES  |     | NULL    |       |
+| useful      | int(11)     | YES  |     | NULL    |       |
+| funny       | int(11)     | YES  |     | NULL    |       |
+| cool        | int(11)     | YES  |     | NULL    |       |
+| business_id | varchar(22) | NO   | MUL | NULL    |       |
+| user_id     | varchar(22) | NO   | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+Types not SQL standard: datetime, text
+
+mysql> describe yuser;
++--------------------+--------------+------+-----+---------+-------+
+| Field              | Type         | Null | Key | Default | Extra |
++--------------------+--------------+------+-----+---------+-------+
+| id                 | varchar(22)  | NO   | PRI | NULL    |       |
+| name               | varchar(255) | YES  |     | NULL    |       |
+| review_count       | int(11)      | YES  |     | NULL    |       |
+| yelping_since      | datetime     | YES  |     | NULL    |       |
+| useful             | int(11)      | YES  |     | NULL    |       |
+| funny              | int(11)      | YES  |     | NULL    |       |
+| cool               | int(11)      | YES  |     | NULL    |       |
+| fans               | int(11)      | YES  |     | NULL    |       |
+| average_stars      | float        | YES  |     | NULL    |       |
+| compliment_hot     | int(11)      | YES  |     | NULL    |       |
+| compliment_more    | int(11)      | YES  |     | NULL    |       |
+| compliment_profile | int(11)      | YES  |     | NULL    |       |
+| compliment_cute    | int(11)      | YES  |     | NULL    |       |
+| compliment_list    | int(11)      | YES  |     | NULL    |       |
+| compliment_note    | int(11)      | YES  |     | NULL    |       |
+| compliment_plain   | int(11)      | YES  |     | NULL    |       |
+| compliment_cool    | int(11)      | YES  |     | NULL    |       |
+| compliment_funny   | int(11)      | YES  |     | NULL    |       |
+| compliment_writer  | int(11)      | YES  |     | NULL    |       |
+| compliment_photos  | int(11)      | YES  |     | NULL    |       |
++--------------------+--------------+------+-----+---------+-------+
+20 rows in set (0.00 sec)
+
+Types not SQL standard: datetime
+
+mysql> describe bui[Ksiness;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| id           | varchar(22)  | NO   | PRI | NULL    |       |
+| name         | varchar(255) | YES  |     | NULL    |       |
+| neighborhood | varchar(255) | YES  |     | NULL    |       |
+| address      | varchar(255) | YES  |     | NULL    |       |
+| city         | varchar(255) | YES  |     | NULL    |       |
+| state        | varchar(255) | YES  |     | NULL    |       |
+| postal_code  | varchar(255) | YES  |     | NULL    |       |
+| latitude     | float        | YES  |     | NULL    |       |
+| longitude    | float        | YES  |     | NULL    |       |
+| stars        | float        | YES  |     | NULL    |       |
+| review_count | int(11)      | YES  |     | NULL    |       |
+| is_open      | tinyint(4)   | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+12 rows in set (0.00 sec)
+
+Types not SQL standard: tinyint
+
+mysql> select count(*) from review;
++----------+
+| count(*) |
++----------+
+|  4736897 |
++----------+
+1 row in set (1 min 10.07 sec)
+
+mysql> select count*[K(*) from yuser;
++----------+
+| count(*) |
++----------+
+|  1183362 |
++----------+
+1 row in set (0.76 sec)
+
+mysql> select count(*) from business;
++----------+
+| count(*) |
++----------+
+|   156639 |
++----------+
+1 row in set (0.10 sec)
+
+mysql> exit
+::::::::::::::
+problem8.txt
+::::::::::::::
+Oracle runs with timing (timing only required for CS630)
+
+SQL> set timing on
+SQL> @problem8.sql
+
+ MAX(COOL)
+----------
+       513
+
+Elapsed: 00:00:02.15
+
+  COUNT(*)
+----------
+     56525
+
+Elapsed: 00:01:02.55
+
+  COUNT(*)
+----------
+    362319
+
+Elapsed: 00:01:00.24
+
+COUNT(DISTINCTUSER_ID)
+----------------------
+                485073
+
+Elapsed: 00:00:05.56
+
+COUNT(DISTINCTUSER_ID)
+----------------------
+                 35690
+
+Elapsed: 00:00:05.31
+SQL> @problem8.sql
+
+ MAX(COOL)
+----------
+       513
+
+Elapsed: 00:00:01.74
+
+  COUNT(*)
+----------
+     56525
+
+Elapsed: 00:01:01.61
+
+  COUNT(*)
+----------
+    362319
+
+Elapsed: 00:00:59.34
+
+COUNT(DISTINCTUSER_ID)
+----------------------
+                485073
+
+Elapsed: 00:00:06.13
+
+COUNT(DISTINCTUSER_ID)
+----------------------
+                 35690
+
+Elapsed: 00:00:05.04
+SQL> exit
+Script started on Sat 06 Oct 2018 04:59:33 PM EDT
+
+Mysql runs
+
+eoneil@pe07:~/630/hw2Solution.f18$ mysql -u eoneil1 -D yelp_db -p
+Enter password: 
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 4668
+Server version: 5.7.22-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> source problem8.sql
++-----------+
+| max(cool) |
++-----------+
+|       513 |
++-----------+
+1 row in set (4.82 sec)
+
++----------+
+| count(*) |
++----------+
+|    61027 |
++----------+
+1 row in set (44.66 sec)
+
++----------+
+| count(*) |
++----------+
+|   386249 |
++----------+
+1 row in set (40.26 sec)
+
++-------------------------+
+| count(distinct user_id) |
++-------------------------+
+|                  485910 |
++-------------------------+
+1 row in set (45.19 sec)
+
++-------------------------+
+| count(distinct user_id) |
++-------------------------+
+|                   35781 |
++-------------------------+
+1 row in set (1 min 13.30 sec)
+
+mysql> source problem8.sql
++-----------+
+| max(cool) |
++-----------+
+|       513 |
++-----------+
+1 row in set (5.12 sec)
+
++----------+
+| count(*) |
++----------+
+|    61027 |
++----------+
+1 row in set (38.47 sec)
+
++----------+
+| count(*) |
++----------+
+|   386249 |
++----------+
+1 row in set (39.12 sec)
+
++-------------------------+
+| count(distinct user_id) |
++-------------------------+
+|                  485910 |
++-------------------------+
+1 row in set (45.01 sec)
+
++-------------------------+
+| count(distinct user_id) |
++-------------------------+
+|                   35781 |
++-------------------------+
+1 row in set (1 min 12.90 sec)
+
+mysql> exot[K[Kit
+Bye
+eoneil@pe07:~/630/hw2Solution.f18$ exit
+exit
+
+Script done on Sat 06 Oct 2018 05:14:58 PM EDT
+Report on Performance of queries on Oracle and mysql (required for CS630 only)
+
+select max(cool) from yelp_db.review;
+Oracle: 2.15s, 1.74 s
+Mysql: 4.82s, 5.12s
+select count(*) from yelp_db.review r where r.text like '%dirty%';
+Oracle:62.55s (1:02.55) 61.61s, 
+Mysql: 44.66s, 38.47s
+select count(*) from yelp_db.review r where r.text like '%clean%';
+Oracle: 60.24s, 59.34s
+Mysql: 40.26s, 39.12s
+select count(distinct user_id) from yelp_db.review r, yelp_db.business b
+where r.business_id = b.id and b.state = 'NV';
+Oracle: 5.56s, 6.13s, 
+Mysql: 45.19s, 45.01s
+select count(distinct user_id) from yelp_db.review r, yelp_db.business b, yelp_db.yuser u
+where r.business_id = b.id and r.user_id = u.id and b.state = 'NV' and u.cool > 10;
+Oracle 5.31s, 5.04s,
+Mysql: 73.30s, 72.90s
+
+
+This shows Oracle much faster on join queries, but mysql faster on word searches
+in the review texts.
+

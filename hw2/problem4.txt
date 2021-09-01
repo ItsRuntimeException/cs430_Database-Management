@@ -1,0 +1,224 @@
+Script started on Fri 01 Mar 2019 10:20:11 PM EST
+runlin@pe07:~/cs630/tables$ sqlplus runlin/runlin@//dbs3.cs.umb.edu/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Fri Mar 1 22:20:47 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Fri Mar 01 2019 19:57:42 -05:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> set echo on
+SQL> @problem4.sql
+SQL> --CS 630 hw 2 Solutions: Problem 4.3 of R&G
+SQL> --Jinghui Zhou	(student name)
+SQL> --start up script on topcat or pe07
+SQL> --connect to dbs3 using sqlplus
+SQL> --use "set echo on", then run this by "@problem4.sql"
+SQL> --exit from sqlplus, then exit again to finish typescript
+SQL> --"mv typescript problem4.txt" to rename it for delivery
+SQL> -- Note: all-caps for SQL keywords is not needed
+SQL> -- But we need to capitalize color names in table parts to match data
+SQL> 
+SQL> --[4.3 part1] Find the names of suppliers who supply some red part.
+SQL> SELECT DISTINCT s.sname
+  2  FROM suppliers s, parts p, catalog c
+  3  WHERE p.color='Red' AND c.pid=p.pid AND c.sid=s.sid;
+
+SNAME
+------------------------------
+Perfunctory Parts
+Big Red Tool and Die
+Acme Widget Suppliers
+Alien Aircaft Inc.
+
+SQL> 
+SQL> --[4.3 part2] Find the sids of suppliers who supply some red or green part.
+SQL> SELECT c.sid
+  2  FROM parts p, catalog c
+  3  WHERE (p.color='Red' OR p.color='Green') AND c.pid=p.pid;
+
+       SID
+----------
+	 1
+	 1
+	 1
+	 1
+	 2
+	 2
+	 3
+	 3
+	 4
+
+9 rows selected.
+
+SQL> 
+SQL> --[4.3 part3] Find the sids of suppliers who supply some red part or are at 221 Packer Ave.
+SQL> SELECT s.sid
+  2  FROM suppliers s, parts p, catalog c
+  3  WHERE (p.color='Red' OR s.address='221 Packer Ave') AND c.sid=s.sid;
+
+       SID
+----------
+	 1
+	 1
+	 1
+	 1
+	 1
+	 1
+	 1
+	 1
+	 1
+	 1
+	 1
+
+       SID
+----------
+	 1
+	 1
+	 1
+	 1
+	 1
+	 1
+	 1
+	 1
+	 1
+	 1
+	 1
+
+       SID
+----------
+	 1
+	 1
+	 1
+	 1
+	 1
+	 2
+	 2
+	 2
+	 2
+	 2
+	 2
+
+       SID
+----------
+	 2
+	 2
+	 2
+	 3
+	 3
+	 3
+	 3
+	 3
+	 3
+	 4
+	 4
+
+       SID
+----------
+	 4
+	 4
+	 4
+	 4
+	 4
+	 4
+	 4
+
+51 rows selected.
+
+SQL> 
+SQL> --[4.3 part4] Find the sids of suppliers who supply some red part and some green part.
+SQL> SELECT c.sid
+  2  FROM parts p, catalog c
+  3  WHERE p.color='Red' AND c.pid=p.pid
+  4  INTERSECT
+  5  SELECT c.sid
+  6  FROM parts p, catalog c
+  7  WHERE p.color='Green' AND c.pid=p.pid;
+
+       SID
+----------
+	 1
+	 3
+
+SQL> 
+SQL> --[4.3 part9] Find pairs of sids such that the supplier with the first sid charges more
+SQL> -- for some part than the supplier with the second sid.
+SQL> SELECT c1.sid, c2.sid
+  2  FROM catalog c1, catalog c2
+  3  WHERE c1.pid=c2.pid AND c1.sid<>c2.sid
+  4  AND c1.cost>c2.cost;
+
+       SID	  SID
+---------- ----------
+	 4	    1
+	 4	    1
+	 4	    1
+	 3	    1
+	 1	    2
+	 1	    2
+	 4	    2
+	 3	    2
+	 1	    2
+	 4	    3
+	 1	    3
+
+11 rows selected.
+
+SQL> 
+SQL> --[4.3 part10] Find the pids of parts supplied by at least two different suppliers.
+SQL> SELECT c1.pid
+  2  FROM catalog c1, catalog c2
+  3  WHERE c1.pid=c2.pid AND c1.sid<>c2.sid;
+
+       PID
+----------
+	 1
+	 4
+	 5
+	 7
+	 8
+	 8
+	 8
+	 9
+	 1
+	 7
+	 8
+
+       PID
+----------
+	 8
+	 8
+	 8
+	 8
+	 8
+	 9
+	 4
+	 5
+	 8
+	 8
+	 8
+
+22 rows selected.
+
+SQL> 
+SQL> --[4.3 part11] Find the pids of the most expensive parts supplied by suppliers named Yosemite Sham.
+SQL> SELECT c1.pid
+  2  FROM suppliers s, catalog c1, catalog c2
+  3  WHERE s.sname='Yosemite Sham'
+  4  AND c1.sid=s.sid
+  5  AND c2.sid<>s.sid
+  6  AND c1.cost>c2.cost;
+
+no rows selected
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@pe07:~/cs630/tables$ exit
+exit
+
+Script done on Fri 01 Mar 2019 10:22:48 PM EST

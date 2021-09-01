@@ -1,0 +1,12 @@
+MySQL vs Oracle sqlplus
+
+sqlplus takes a lot longer to load data and showing the result back the 1st time.
+sqlplus takes about 2 minutes and 30 seconds to load countDirty and countClean the 1st time, about the same the 2nd time also.
+sqlplus takes 2 second less to load MAX(r.cool) for the 2nd time.
+
+
+MySQL taking about the same time to load data back to us on the 1st and 2nd time of execution, but much faster than sqlplus.
+MySQL only takes about 37 seconds for countDirty and countClean.
+
+problem8FKs: 	The FKs in yelp_db.review are 'business_id' referencing to yelp_db.business's id, 
+		and 'user_id' referencing to yuser's id.

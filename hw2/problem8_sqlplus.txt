@@ -1,0 +1,82 @@
+Script started on Mon 04 Mar 2019 12:54:01 AM EST
+runlin@pe07:~/cs630/hw2$ sqlplus runlin/runlin@//dbs3.cs.umb.eduy[K/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Mar 4 00:54:24 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Mon Mar 04 2019 00:33:32 -05:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> @problem8.sql;
+
+MAX(R.COOL)
+-----------
+	513
+
+Elapsed: 00:00:04.39
+
+COUNTDIRTY
+----------
+     56525
+
+Elapsed: 00:02:34.40
+
+COUNTCLEAN
+----------
+    362319
+
+Elapsed: 00:02:28.01
+
+    USERNV
+----------
+       911
+
+Elapsed: 00:00:01.05
+
+USERNVCOOL
+----------
+	 4
+
+Elapsed: 00:00:00.15
+SQL> @problem8.sql;
+
+MAX(R.COOL)
+-----------
+	513
+
+Elapsed: 00:00:02.35
+
+COUNTDIRTY
+----------
+     56525
+
+Elapsed: 00:02:34.38
+
+COUNTCLEAN
+----------
+    362319
+
+Elapsed: 00:02:27.82
+
+    USERNV
+----------
+       911
+
+Elapsed: 00:00:00.87
+
+USERNVCOOL
+----------
+	 4
+
+Elapsed: 00:00:00.10
+SQL> s exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@pe07:~/cs630/hw2$ exit
+exit
+
+Script done on Mon 04 Mar 2019 01:07:08 AM EST

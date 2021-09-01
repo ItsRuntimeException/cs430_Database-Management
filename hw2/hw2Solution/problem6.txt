@@ -1,0 +1,122 @@
+Script started on Sat 06 Oct 2018 02:51:15 PM EDT
+eoneil@pe07:~/630/hw2Solution.f18$ !sq
+sqlplus cs630test/cs630test@//dbs3.cs.umb.edu/dbs3;
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sat Oct 6 14:51:22 2018
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sat Oct 06 2018 14:29:18 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> set echo on
+SQL> @probm lem6.sql
+SQL> -- Problem 6a
+SQL> -- Find the major and the average age of students for that major, for each
+SQL> -- major. List major and average age.
+SQL> 
+SQL> select s.major, AVG(s.age)
+  2  from student s
+  3  group by s.major;
+
+MAJOR                     AVG(S.AGE)
+------------------------- ----------
+Law                               20
+Animal Science                    18
+Accounting                        19
+Mechanical Engineering            19
+Electrical Engineering            17
+Computer Science                18.5
+Computer Engineering            18.5
+Economics                         20
+Veterinary Medicine               21
+English                           21
+Civil Engineering                 21
+
+MAJOR                     AVG(S.AGE)
+------------------------- ----------
+Architecture                      22
+Finance                           18
+Kinesiology                       19
+History                           20
+Psychology                        19
+Education                         21
+
+17 rows selected.
+
+SQL> 
+SQL> -- Problem 6b
+SQL> -- For each room that has a class, find how many different departments use
+SQL> -- that room for classes.List room and count of departments.
+SQL> -- Don't report null room values.
+SQL> 
+SQL> -- count the number of departments asociated with each room
+SQL> 
+SQL> select c.room, COUNT(DISTINCT f.deptid)
+  2  from class c, faculty f
+  3  where c.fid = f.fid and c.room is not null
+  4  group by c.room;
+
+ROOM       COUNT(DISTINCTF.DEPTID)
+---------- -----------------------
+20 AVW                           3
+R128                             4
+R15                              3
+Q3                               2
+1320 DCL                         3
+R12                              2
+
+6 rows selected.
+
+SQL> 
+SQL> -- Problem 6c
+SQL> -- Display results from c. only for rooms used by 2 or more departments.
+SQL> select c.room, COUNT(DISTINCT f.deptid) AS ct
+  2       from class c, faculty f
+  3       where c.fid = f.fid and c.room is not null
+  4       group by c.room
+  5       having count(distinct f.deptid) > = 2;
+
+ROOM               CT
+---------- ----------
+20 AVW              3
+R128                4
+R15                 3
+Q3                  2
+1320 DCL            3
+R12                 2
+
+6 rows selected.
+
+SQL> 
+SQL> -- Alternatively,
+SQL> 
+SQL> select *
+  2  from (select c.room, COUNT(DISTINCT f.deptid) AS ct
+  3       from class c, faculty f
+  4       where c.fid = f.fid and c.room is not null
+  5       group by c.room)
+  6  where ct >= 2;
+
+ROOM               CT
+---------- ----------
+20 AVW              3
+R128                4
+R15                 3
+Q3                  2
+1320 DCL            3
+R12                 2
+
+6 rows selected.
+
+SQL> 
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+eoneil@pe07:~/630/hw2Solution.f18$ exit
+exit
+
+Script done on Sat 06 Oct 2018 02:51:45 PM EDT

@@ -1,0 +1,86 @@
+Script started on Fri 01 Mar 2019 02:07:33 AM EST
+runlin@pe07:~/cs630/tables$ sh dbbook_mysql.sh
+This script assumes you have /home/runlin/.my.cnf set up with your mysql password
+Enter your mysql username: runlin
+Enter your mysql database: runlindb
+
+Creating Tables. runlin /home/runlin
+expect flights table to fail here
+ERROR 1067 (42000) at line 75: Invalid default value for 'arrives'
+redoing flights table using modified sql_mode (workaround)
+flights table created
+Created Tables, next will load table student.
+Loading student
+Bulk Loading Data. This may take a few moments.
+Loading faculty
+Loading class
+Loading enrolled
+Loading emp
+Loading dept
+Loading works
+Loading parts
+Loading suppliers
+Loading catalog
+Loading aircraft
+Loading employees
+Loading flights
+Loading certified
+Loading sailors
+Loading boats
+Loading sailors
+--------------
+insert into class values ('Artificial Intelligence',null,'UP328',null)
+--------------
+
+Done. The sample data is now loaded in mysql.
+runlin@pe07:~/cs630/tables$ mysql
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13419
+Server version: 5.7.22-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> select * from boats;
++-----+-----------+-------+
+| bid | bname     | color |
++-----+-----------+-------+
+| 101 | Interlake | blue  |
+| 102 | Interlake | red   |
+| 103 | Clipper   | green |
+| 104 | Marine    | red   |
++-----+-----------+-------+
+4 rows in set (0.00 sec)
+
+mysql> exit
+Bye
+runlin@pe07:~/cs630/tables$ mysql -u runlin -D runlindb < dropdb.sql
+runlin@pe07:~/cs630/tables$ myse[Kql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13421
+Server version: 5.7.22-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> select * from boats;
+ERROR 1146 (42S02): Table 'runlindb.boats' doesn't exist
+mysql> exitr[K
+Bye
+runlin@pe07:~/cs630/tables$ exit
+exit
+
+Script done on Fri 01 Mar 2019 02:09:10 AM EST

@@ -1,0 +1,89 @@
+Script started on Fri 01 Mar 2019 11:51:51 PM EST
+runlin@pe07:~/cs630/tables$ exitsqlplus runlin/runlin@//dbs3.cs.umb.edu/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Fri Mar 1 23:51:53 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Fri Mar 01 2019 23:33:00 -05:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> set echo on
+SQL> @problem5.sql
+SQL> --Run Lin
+SQL> --start up script on topcat or pe07
+SQL> --connect to dbs3 using sqlplus
+SQL> --use "set echo on", then run this by "@problem5.sql"
+SQL> --exit from sqlplus, then exit again to finish typescript
+SQL> --"mv typescript problem5.txt" to rename it for delivery
+SQL> -- Note: all-caps for SQL keywords is not needed
+SQL> -- But we need to capitalize color names in table parts to match data
+SQL> 
+SQL> --Suppliers(sid: integer, sname: string, address: string)
+SQL> --Parts(pid: integer, pname: string, color: string)
+SQL> --Catalog(sid: integer, pid: integer, cost: real)
+SQL> 
+SQL> --[5.2 part1] Find the pnames of parts for which there is some supplier.
+SQL> SELECT DISTINCT p.pname
+  2  FROM parts p, catalog c
+  3  WHERE p.pid=c.pid;
+
+PNAME
+----------------------------------------
+Acme Widget Washer
+Fire Hydrant Cap
+Anti-Gravity Turbine Generator
+7 Segment Display
+I Brake for Crop Circles Sticker
+Left Handed Bacon Stretcher Cover
+Smoke Shifter End
+
+7 rows selected.
+
+SQL> 
+SQL> --[5.2 part4] Find the pnames of parts supplied by Acme Widget Suppliers and no one else.
+SQL> -- try (not exist)
+SQL> SELECT p.pname
+  2  FROM parts p, catalog c1, suppliers s1
+  3  WHERE p.pname='Acme Widget Suppliers' AND p.pid=c1.pid AND c1.sid=s1.sid
+  4  AND NOT EXISTS (SELECT * FROM catalog c2, suppliers s2
+  5  WHERE p.pid=c2.pid AND c2.pid=s2.sid AND s2.sname<>'Acme Widget Suppliers');
+
+no rows selected
+
+SQL> 
+SQL> --[5.2 part5] Find the sids of suppliers who charge more for some part than
+SQL> -- the average cost of that part (averaged over all the suppliers who supply that part).
+SQL> SELECT DISTINCT c1.sid
+  2  FROM catalog c1
+  3  WHERE c1.cost>(SELECT AVG(c2.cost) FROM catalog c2
+  4  WHERE c2.pid=c1.pid);
+
+       SID
+----------
+	 1
+	 4
+
+SQL> 
+SQL> --[5.2 part7] Find the sids of suppliers who supply only red parts.
+SQL> -- can do without subquery (lecture06_Slide19) [Use EXCEPT or NOT IN]
+SQL> SELECT c1.sid
+  2  FROM catalog c1, parts p1
+  3  WHERE p1.pid=c1.pid AND p1.color='Red'
+  4  AND c1.sid NOT IN (
+  5  SELECT c2.sid
+  6  FROM catalog c2, parts p2
+  7  WHERE p2.pid=c2.pid AND p2.color<>'Red');
+
+no rows selected
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@pe07:~/cs630/tables$ exit[K[K[K[Kexit
+exit
+
+Script done on Fri 01 Mar 2019 11:52:09 PM EST

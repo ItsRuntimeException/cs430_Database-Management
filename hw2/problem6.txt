@@ -1,0 +1,109 @@
+Script started on Sat 02 Mar 2019 12:44:21 AM EST
+runlin@pe07:~/cs630/tables$ exitsqlplus runlin/runlin@//dbs3.cs.umb.edu/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sat Mar 2 00:44:23 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sat Mar 02 2019 00:24:15 -05:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> set echo on
+SQL> @problem6.sql
+SQL> --Run Lin
+SQL> --start up script on topcat or pe07
+SQL> --connect to dbs3 using sqlplus
+SQL> --use "set echo on", then run this by "@problem6.sql"
+SQL> --exit from sqlplus, then exit again to finish typescript
+SQL> --"mv typescript problem6.txt" to rename it for delivery
+SQL> -- Note: all-caps for SQL keywords is not needed
+SQL> -- But we need to capitalize color names in table parts to match data
+SQL> 
+SQL> --Student(snum: integer, sname: string, major: string, standing: string, age: integer)
+SQL> --Class(cname: string, meets_at: time, room: string, fid: integer)
+SQL> --Enrolled(snum: integer, cname: string)
+SQL> --Faculty (fid: integer, fname: string, deptid: integer)
+SQL> 
+SQL> --[Q6 part A] Find the major and the average age of students for that major, for each major. List major and average age.
+SQL> SELECT s.major, AVG(s.age)
+  2  FROM student s
+  3  GROUP BY s.major;
+
+MAJOR			  AVG(S.AGE)
+------------------------- ----------
+Law				  20
+Animal Science			  18
+Accounting			  19
+Mechanical Engineering		  19
+Electrical Engineering		  17
+Computer Science		18.5
+Computer Engineering		18.5
+Economics			  20
+Veterinary Medicine		  21
+English 			  21
+Civil Engineering		  21
+
+MAJOR			  AVG(S.AGE)
+------------------------- ----------
+Architecture			  22
+Finance 			  18
+Kinesiology			  19
+History 			  20
+Psychology			  19
+Education			  21
+
+17 rows selected.
+
+SQL> 
+SQL> --[Q6 part B] For each room that has a class, find how many different departments use that room for classes.
+SQL> --List room and count of departments.
+SQL> --Use the class's faculty's deptid as the department using a room. Don't report null room values.
+SQL> SELECT c.room, COUNT(f.deptid)
+  2  FROM faculty f, class c
+  3  WHERE c.fid=f.fid
+  4  AND c.room IS NOT NULL
+  5  AND f.deptid IS NOT NULL
+  6  GROUP BY c.room;
+
+ROOM	   COUNT(F.DEPTID)
+---------- ---------------
+20 AVW			 4
+R128			 5
+Q3			 2
+R15			 5
+1320 DCL		 3
+R12			 2
+
+6 rows selected.
+
+SQL> 
+SQL> --[Q6 part C] Display results from b. only for rooms used by 2 or more departments. (HAVING clause).
+SQL> SELECT c.room, COUNT(f.deptid)
+  2  FROM faculty f, class c
+  3  WHERE c.fid=f.fid
+  4  AND c.room IS NOT NULL
+  5  AND f.deptid IS NOT NULL
+  6  GROUP BY c.room
+  7  HAVING COUNT(f.deptid)>=2;
+
+ROOM	   COUNT(F.DEPTID)
+---------- ---------------
+20 AVW			 4
+R128			 5
+Q3			 2
+R15			 5
+1320 DCL		 3
+R12			 2
+
+6 rows selected.
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@pe07:~/cs630/tables$ exit
+exit
+
+Script done on Sat 02 Mar 2019 12:44:35 AM EST

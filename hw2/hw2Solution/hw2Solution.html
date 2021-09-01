@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>CS630 hw2</title>
+    <meta content="Betty O'Neil" name="author">
+  </head>
+  <body>
+    <h3>CS630 Homework 2&nbsp; Getting started with mysql, foreign keys<b>, SQL
+        (with subqueries, group by, having) Solution</b><span style="font-style: italic;"><b><em><em></em></em></b></span></h3>
+    <p>due&nbsp; Sunday, Mar 3<span style="background: yellow"></span> by
+      midnight in your cs630/hw2 directory.</p>
+    <p>Text file with all problem outputs (*.txt): <a href="hw2listing.html">hw2listing.</a>
+      Individual problem solution files are linked below problems.</p>
+    <p>1.<span style="font-weight: bold;"> Getting started with mysql:</span></p>
+    <p> a. Check your mysql account by simply logging into it. For user joe,
+      login to pe07 from users or topcat and do the command:<br>
+      <code>mysql -u joe -D joedb -p<br>
+        Password: joe</code></p>
+    <p>Or if you don't use -D joedb on the command line, use "use joedb" once
+      inside mysql. Use "show tables" to look for tables. Unless you used this
+      account for other classes, you should see an empty set of tables. If you
+      do see old tables and want me to reinitialize your account, let me know by
+      email.</p>
+    <p>You already have copied the $cs630/tables directory to your own
+      ~/cs630/tables directory as directed in homework 1. Again cd to
+      cs630/tables and use "ls" to list the files (while logged in on either
+      system). You should see dbbook_mysql.sh. In order to load tables with bulk
+      load (rather than individual inserts, a slower process), we need to set up
+      easy no-password access to mysql, as described in the comments in
+      dbbook_mysql.sh, and also in README. For example, user joe creates file
+      .my.cnf in his login directory with contents:<br>
+      <code>[client]<br>
+        password=joe<br>
+        [mysql]<span style="font-family: monospace;"><br>
+          database=joedb</span></code> </p>
+    <p>Since this lists your password, it should be protected as a file: "chmod
+      o-r .my.cnf" makes it unreadable to other users. We will check for the
+      existence and protection of this file. Now check that you can log into
+      mysql without a password:<code><br>
+        mysql -u joe<br>
+        mysql&gt;</code></p>
+    <p> b. Load the R&amp;G book's tables into your mysql account by executing
+      "sh dbbook_mysql.sh" on pe07. You will be prompted for your mysql username
+      and database name (joe and joedb, for example). When it is done, check
+      your tables by using mysql on pe07 with "show tables" and&nbsp; "select *
+      from student;", etc.</p>
+    <p>c. Drop the tables by using<br>
+      <code>mysql -u joe -D joedb &lt; dropdb.sql</code></p>
+    <p>Use "show tables" to see the result, then load the tables again. </p>
+    <p>d. Make a typescript showing just "select * from boats" output. To do
+      this, log into pe07, run the "script" command, then use mysql to access
+      your tables and do the select, then exit from mysql and then exit again,
+      which finishes the script in file "typescript". Rename typescript to
+      "problem1.txt" in your hw2 directory. Although ".txt" doesn't mean
+      anything to the Linux OS, it indicates a text file to most users because
+      of its Windows meaning.&nbsp; If you couldn't load the database, explain
+      what happened in this file, with script of error in the execution.</p>
+    <p>Solution: <a href="problem1.txt">problem1.txt</a></p>
+    <p>2. <span style="font-weight: bold;">Foreign Keys.</span> R&amp;G
+      Exercise 3.8&nbsp; Note that these tables are in tables/createdb.sql, and
+      you can change their create-tables temporarily for experiments if you
+      wish, and just reload the database afterwards. Put this answer in
+      problem2.txt in your hw2 directory.&nbsp; It would be a good idea to test
+      your SQL by putting your solution in a .sql file and running it, but that
+      is not required for the homework. For part 6, consider the Legal
+      department instead of the Toy department, since it shows up in our loaded
+      data.</p>
+    <p>Solution: <a href="problem2.txt">problem2.txt</a></p>
+    <p>3. <span style="font-weight: bold;">Null foreign keys</span>. Note that
+      createdb.sql's dept table has a nullable managerid. Show that because of
+      this, you can insert a row with a null managerid and have a department
+      without a real manager, even though we have a foreign key constraint on
+      managerid. Put your insert statement into insertnull.sql, and show that
+      file and results on Oracle and (optionally) mysql (of select * from dept)
+      in problem3.txt for Oracle and/or problem3_mysql.txt for mysql in your hw2
+      directory. In practice, we prefer not null foreign key columns to avoid
+      this behavior. Sometimes a null FK is appropriate, in the case that the
+      referenced information is optional or not available yet when this row is
+      inserted. For example, the nullable column fid in table class is explained
+      by needing to plan courses ahead of time, when the teacher is not yet
+      assigned.</p>
+    <p><span style="font-weight: bold;">SQL Exercises</span>: Execute on Oracle.
+      Optionally, also execute them on mysql and put results in
+      problem4_mysql.txt, for example. In problem 4, the lack of INTERSECT and
+      EXCEPT make some queries impossible in mysql without a subquery.</p>
+    <p>Solution:&nbsp; <a href="insertnull.sql">insertnull.sql </a><a href="problem3.txt">problem3.txt</a></p>
+    <p>4.<span style="font-weight: bold;"> SQL</span> <span style="font-weight: bold;">without
+        subqueries. </span>Our first coverage (Lectures 4 and 5) was of queries
+      we can do in SQL without using subqueries or division. Do the queries of
+      Exercise 4.3, parts 1-4 and 9-11 in SQL without using subqueries (i.e.,
+      your answer must have only one SELECT in it, plus one more for each UNION
+      or INTERSECTION or EXCEPT/MINUS in use. There are some SQL answers in the
+      online solutions, but most have subqueries.&nbsp; Create a script
+      problem4.sql with these queries, in order. <a href="problem4.sql">problem4.sql
+        </a>is supplied with the first problem solved. Follow the directions in
+      that script, and provide the output in problem4.txt. You can copy
+      problem4.sql to your current directory on cs.umb.edu by "<code>cp
+        /htdocs/cs630/problem4.sql .</code>"</p>
+    <p>Solution: <a href="problem4.sql">problem4.sql</a> <a href="problem4.txt">problem4.txt</a></p>
+    <p>Note that problem 8 has queries that don't need subqueries, on the Yelp
+      database, so you may want to do that one next.</p>
+    <p>5.<span style="font-weight: bold;"> SQL with subqueries</span> if
+      desired. Do the queries of Exercise 5.2, parts 1, 4, 5 and 7 in SQL and
+      create a script problem5.sql (following the pattern of problem4.sql) and
+      its output in problem5.txt, and optionally in problem5_mysql.txt.<span style="background-color:yellow"><br>
+      </span></p>
+    <p>Solution: <a href="problem5.sql">problem5.sql</a> <a href="problem5.txt">problem5.txt</a><br>
+      <span style="background-color:yellow"></span></p>
+    <p>6. <span style="font-weight: bold;">SQL with group by, having</span>.
+      Create a script problem6.sql (following the pattern of problem4.sql) and
+      its output in problem6.txt/problem6_mysql.txt. Use the schema of Exercise
+      5-1 (but change student's <code>level </code>to <code> standing </code>to
+      match our <code>createdb.sql</code>) to do these:</p>
+    <p>a. Find the major and the average age of students for that major, for
+      each major. List major and average age.</p>
+    <p>b. For each room that has a class, find how many different departments
+      use that room for classes.List room and count of departments. Use the
+      class's faculty's deptid as the department using a room. Don't report null
+      room values.</p>
+    <p>Solution: <a href="problem6.sql">problem6.sql</a> <a href="problem6.txt">problem6.txt</a></p>
+    <p>c. Display results from b. only for rooms used by 2 or more departments.</p>
+    <p>7. <span style="font-weight: bold;">SQL with more advanced features if
+        needed.</span> Do the queries of Exercise 5.4 after adding <code>dname
+      </code>to <code>Dept </code>in the schema (it is this way in
+      createdb.sql). Do parts 1, 3 and 6 in SQL and create a script problem7.sql
+      (following the pattern of problem4.sql) and its output in problem7.txt.</p>
+    <p>Solution: <a href="problem7.sql">problem7.sql</a> <a href="problem7.txt">problem7.txt</a></p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">8.
+      <b>Oracle vs. mysql using a larger DB. </b>The mysql answers are optional
+      for CS430, but I hope you'll be interested in seeing how well mysql works
+      in a fairly realistic setting. If you haven't read Yelp reviews before,
+      visit for example <a href="https://www.yelp.com/biz/university-of-massachusetts-boston-dorchester">Yelp
+        on UMB</a><span style="color: black;"> </span>or <a href="https://www.yelp.com/search?cflt=restaurants&amp;find_loc=Dorchester%2C+Boston%2C+MA">Yelp
+        on Dorchester restaurants.</a><b><br>
+      </b></p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">The
+      <a href="https://www.yelp.com/dataset">partial Yelp database</a> (as of
+      this spring) is now publicly available in database yelp_db in both our
+      Oracle and mysql servers. This database is available online, ready for
+      loading into mysql. </p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">This
+      paragraph just explains why some reviews are missing in the Oracle version
+      of the database: you don't need to do anything about it, just do SQL
+      queries on what's there. To move the tables to Oracle, I first used mysql
+      to dump them to CSV files (CSV stands for comma-separated values). Most
+      tables were easily loaded using sqlldr from these CSV files. However, the
+      review table is full of entries with newlines (the actual reviews), and
+      Oracle's sqlldr insists on treating newlines as ends of records. So I
+      wrote a mysql query to use string REPLACE on the review text to change
+      newlines to spaces, and output values in CSV format. This worked except
+      for a few rows, which still failed, so we have 0.3% fewer reviews in
+      Oracle.</p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">a.
+      First find out basic facts on this database. The core tables are <code>review</code>,
+      holding reviews by users about businesses, <code>yuser </code>for the
+      users, and <code>business </code>for the businesses. We can't use "user"
+      as a table name because it's a reserved word in Oracle. Use "describe" on
+      these tables in both mysql and Oracle and include the output in your
+      paper. You can access yuser, for example, as table yelp_db.yuser in either
+      DB. Note that datatype "int(11)" for mysql is really just int, the
+      standard type. Note any non-standard types.&nbsp; For a list of SQL
+      standard types, see <a href="slides/Lecture04.pdf">Lecture 4 slides</a>.
+      Find out how many rows each of these three tables have using SQL. Put this
+      output in problem8intro.txt.</p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">b.
+      Let's compare Oracle and mysql for this sizable database. Run each query
+      twice. CS630 students should time the queries. timing. Mysql shows
+      execution time after each query automatically. For Oracle, use "set timing
+      on" for a session. Although Oracle is using a multiple disks and mysql
+      only one disk, they both have enough memory for the entire yelp_db
+      database, so a second execution of a query should involve no disk reading,
+      usually the most time-consuming part of a query on a large database.</p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">Queries
+      on yelp_db: Treat these as described in problem4.sql, plus "set timing on"
+      for CS630 students (optional for CS430) and put the queries in
+      problem8.sql and the output in file problem8.txt. CS630 students should
+      summarize the findings on relative performance of the two systems at the
+      end of the problem8.txt file (one full sentence is fine.) </p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">i.
+      Find the maximum cool count in the reviews. You can use this value to find
+      the max-cool review(s) themselves, but don't show this in the output file
+      (too much output). Find the number of reviews containing the word 'dirty',
+      and separately, containing the word 'clean'.</p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">ii.
+      Find the number of users (#unique user ids) reviewing businesses in 'NV'.</p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">iii.
+      Find the number of users with cool count over 10 reviewing businesses in
+      'NV'. Note that both reviews and users have cool counts. A user's cool
+      count gets incremented when one of their reviews is marked "cool".</p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">c.
+      Use "show create table yelp_db.review" in mysql to see the create table
+      statement used for this table. This information can be extracted from
+      Oracle as well but it's somewhat harder: see <a href="https://stackoverflow.com/questions/18264584/show-create-table-equivalent-in-oracle-sql">StackOverflow
+        answer</a> if interested. Use this report from mysql to determine the
+      foreign keys in use here. Put this output and discussion in
+      problem8FKs.txt.</p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">Solution:
+      <a href="problem8intro.txt">problem8intro.txt</a>, <a href="problem8.sql">problem8.sql</a>,<a
+        href="problem8.txt"> problem8.txt</a>, <a href="problem8FKs.txt">
+        problem8FKs.txt</a></p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">Files
+      for grading in cs630/hw2: </p>
+    <p><code>problem1.txt<br>
+        problem2.txt (no computer output here)<br>
+        insertnull.sql, problem3.txt (optionally problem3_mysql.txt, and
+        similarly below)<br>
+        problem4.sql, problem4.txt </code><code><code></code><br>
+        problem5.sql, problem5.txt </code><code><code><code></code></code><br>
+        problem6.sql, problem6.txt<br>
+        problem7.sql, problem7.txt<br>
+      </code><code>problem8intro.txt, problem8.sql, problem8.txt,
+        problem8FKs.txt<br>
+      </code></p>
+    <p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">
+    </p>
+    <p> </p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+  </body>
+</html>

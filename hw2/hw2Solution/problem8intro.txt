@@ -1,0 +1,210 @@
+Script started on Sat 06 Oct 2018 04:12:50 PM EDT
+eoneil@pe07:~/630/hw2Solution.f18$ !sq
+sqlplus cs630test/cs630test@//dbs3.cs.umb.edu/dbs3;
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sat Oct 6 16:12:57 2018
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sat Oct 06 2018 15:42:42 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> describe yelp_db.review;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL VARCHAR2(22)
+ STARS                                              NUMBER(10)
+ REV_DATE                                           TIMESTAMP(0)
+ TEXT                                               CLOB
+ USEFUL                                             NUMBER(10)
+ FUNNY                                              NUMBER(10)
+ COOL                                               NUMBER(10)
+ BUSINESS_ID                               NOT NULL VARCHAR2(22)
+ USER_ID                                   NOT NULL VARCHAR2(22)
+
+Non-standard SQL types: varchar2, number, clob (clob is not on Lecture04 list but is SQL-2003)
+
+SQL> describe yelp_db.yuser;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL VARCHAR2(22)
+ NAME                                               VARCHAR2(255)
+ REVIEW_COUNT                                       NUMBER(10)
+ YELPING_SINCE                                      TIMESTAMP(0)
+ USEFUL                                             NUMBER(10)
+ FUNNY                                              NUMBER(10)
+ COOL                                               NUMBER(10)
+ FANS                                               NUMBER(10)
+ AVERAGE_STARS                                      BINARY_DOUBLE
+ COMPLIMENT_HOT                                     NUMBER(10)
+ COMPLIMENT_MORE                                    NUMBER(10)
+ COMPLIMENT_PROFILE                                 NUMBER(10)
+ COMPLIMENT_CUTE                                    NUMBER(10)
+ COMPLIMENT_LIST                                    NUMBER(10)
+ COMPLIMENT_NOTE                                    NUMBER(10)
+ COMPLIMENT_PLAIN                                   NUMBER(10)
+ COMPLIMENT_COOL                                    NUMBER(10)
+ COMPLIMENT_FUNNY                                   NUMBER(10)
+ COMPLIMENT_WRITER                                  NUMBER(10)
+ COMPLIMENT_PHOTOS                                  NUMBER(10)
+
+Non-standard SQL types: varchar2, number, binary_double (though values are normal double, IEEE double)
+SQL> descrip be yelp_db.business;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL VARCHAR2(22)
+ NAME                                               VARCHAR2(255)
+ NEIGHBORHOOD                                       VARCHAR2(255)
+ ADDRESS                                            VARCHAR2(255)
+ CITY                                               VARCHAR2(255)
+ STATE                                              VARCHAR2(255)
+ POSTAL_CODE                                        VARCHAR2(255)
+ LATITUDE                                           BINARY_DOUBLE
+ LONGITUDE                                          BINARY_DOUBLE
+ STARS                                              BINARY_DOUBLE
+ REVIEW_COUNT                                       NUMBER(10)
+ IS_OPEN                                            NUMBER(3)
+
+Non-standard SQL types: varchar2, binary_double, number
+
+SQL> select count(*) fromy  yelp_db.review;
+
+  COUNT(*)
+----------
+   4720472
+
+SQL> select count(*) from yelp_db.yuser;
+
+  COUNT(*)
+----------
+   1183362
+
+SQL> select count(*) from yelp_db.business;
+
+  COUNT(*)
+----------
+    156638
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+eoneil@pe07:~/630/hw2Solution.f18$ exit
+exit
+
+Script done on Sat 06 Oct 2018 04:14:33 PM EDT
+Script started on Sat 06 Oct 2018 04:05:04 PM EDT
+eoneil@pe07:~/630/hw2Solution.f18$ mysql -u eoneil1/eoneil1[K[K[K[K[K[K[K[K[K1 -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 4644
+Server version: 5.7.22-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use yelp_db;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> describe review;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| id          | varchar(22) | NO   | PRI | NULL    |       |
+| stars       | int(11)     | YES  |     | NULL    |       |
+| review_date | datetime    | YES  |     | NULL    |       |
+| text        | text        | YES  |     | NULL    |       |
+| useful      | int(11)     | YES  |     | NULL    |       |
+| funny       | int(11)     | YES  |     | NULL    |       |
+| cool        | int(11)     | YES  |     | NULL    |       |
+| business_id | varchar(22) | NO   | MUL | NULL    |       |
+| user_id     | varchar(22) | NO   | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+Types not SQL standard: datetime, text
+
+mysql> describe yuser;
++--------------------+--------------+------+-----+---------+-------+
+| Field              | Type         | Null | Key | Default | Extra |
++--------------------+--------------+------+-----+---------+-------+
+| id                 | varchar(22)  | NO   | PRI | NULL    |       |
+| name               | varchar(255) | YES  |     | NULL    |       |
+| review_count       | int(11)      | YES  |     | NULL    |       |
+| yelping_since      | datetime     | YES  |     | NULL    |       |
+| useful             | int(11)      | YES  |     | NULL    |       |
+| funny              | int(11)      | YES  |     | NULL    |       |
+| cool               | int(11)      | YES  |     | NULL    |       |
+| fans               | int(11)      | YES  |     | NULL    |       |
+| average_stars      | float        | YES  |     | NULL    |       |
+| compliment_hot     | int(11)      | YES  |     | NULL    |       |
+| compliment_more    | int(11)      | YES  |     | NULL    |       |
+| compliment_profile | int(11)      | YES  |     | NULL    |       |
+| compliment_cute    | int(11)      | YES  |     | NULL    |       |
+| compliment_list    | int(11)      | YES  |     | NULL    |       |
+| compliment_note    | int(11)      | YES  |     | NULL    |       |
+| compliment_plain   | int(11)      | YES  |     | NULL    |       |
+| compliment_cool    | int(11)      | YES  |     | NULL    |       |
+| compliment_funny   | int(11)      | YES  |     | NULL    |       |
+| compliment_writer  | int(11)      | YES  |     | NULL    |       |
+| compliment_photos  | int(11)      | YES  |     | NULL    |       |
++--------------------+--------------+------+-----+---------+-------+
+20 rows in set (0.00 sec)
+
+Types not SQL standard: datetime
+
+mysql> describe bui[Ksiness;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| id           | varchar(22)  | NO   | PRI | NULL    |       |
+| name         | varchar(255) | YES  |     | NULL    |       |
+| neighborhood | varchar(255) | YES  |     | NULL    |       |
+| address      | varchar(255) | YES  |     | NULL    |       |
+| city         | varchar(255) | YES  |     | NULL    |       |
+| state        | varchar(255) | YES  |     | NULL    |       |
+| postal_code  | varchar(255) | YES  |     | NULL    |       |
+| latitude     | float        | YES  |     | NULL    |       |
+| longitude    | float        | YES  |     | NULL    |       |
+| stars        | float        | YES  |     | NULL    |       |
+| review_count | int(11)      | YES  |     | NULL    |       |
+| is_open      | tinyint(4)   | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+12 rows in set (0.00 sec)
+
+Types not SQL standard: tinyint
+
+mysql> select count(*) from review;
++----------+
+| count(*) |
++----------+
+|  4736897 |
++----------+
+1 row in set (1 min 10.07 sec)
+
+mysql> select count*[K(*) from yuser;
++----------+
+| count(*) |
++----------+
+|  1183362 |
++----------+
+1 row in set (0.76 sec)
+
+mysql> select count(*) from business;
++----------+
+| count(*) |
++----------+
+|   156639 |
++----------+
+1 row in set (0.10 sec)
+
+mysql> exit

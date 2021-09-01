@@ -1,0 +1,75 @@
+Script started on Sat 02 Mar 2019 01:28:16 AM EST
+runlin@pe07:~/cs630/tables$ exitsqlplus runlin/runlin@//dbs3.cs.umb.edu/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sat Mar 2 01:28:18 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sat Mar 02 2019 01:08:51 -05:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> set echo on
+SQL> @problem7.sql
+SQL> --Run Lin
+SQL> --start up script on topcat or pe07
+SQL> --connect to dbs3 using sqlplus
+SQL> --use "set echo on", then run this by "@problem7.sql"
+SQL> --exit from sqlplus, then exit again to finish typescript
+SQL> --"mv typescript problem7.txt" to rename it for delivery
+SQL> -- Note: all-caps for SQL keywords is not needed
+SQL> -- But we need to capitalize color names in table parts to match data
+SQL> 
+SQL> --Emp(eid: integer, ename: string, age: integer, salary: real)
+SQL> --Works(eid: integer, did: integer, pct time: integer)
+SQL> --Dept(did: integer, dname: string, budget: real, managerid: integer)
+SQL> 
+SQL> --[Q7 part1] Print the names and ages of each employee who works in both the Hardware department and the Software department.
+SQL> -- (Do a double search, and print ename if both requirements met).
+SQL> SELECT e.ename, e.age
+  2  FROM emp e, dept d1, works w1, dept d2, works w2
+  3  WHERE d1.dname='Hardware' AND e.eid=w1.eid AND w1.did=d1.did
+  4  AND d2.dname='Software' AND e.eid=w2.eid AND w2.did=d2.did;
+
+ENAME				      AGE
+------------------------------ ----------
+Mary Johnson			       44
+Stanley Browne			       23
+
+SQL> 
+SQL> --[Q7 part3] Print the name of each employee whose salary exceeds the budget of all of the departments that he or she works in.
+SQL> SELECT e.ename
+  2  FROM emp e
+  3  WHERE e.salary > ALL (
+  4  	 SELECT d.budget
+  5  	 FROM dept d, works w
+  6  	 WHERE e.eid=w.eid AND w.did=d.did);
+
+ENAME
+------------------------------
+Linda Davis
+
+SQL> 
+SQL> --[Q7 part6] If a manager manages more than one department, he or she controls the sum of all the
+SQL> --budgets for those departments. Find the managerids of managers who control more than
+SQL> --$5 million (total budget).
+SQL> SELECT d1.managerid
+  2  FROM dept d1
+  3  WHERE (
+  4  	 SELECT SUM(d2.budget)
+  5  	 FROM dept d2
+  6  	 WHERE d2.managerid=d1.managerid) > 5000000;
+
+ MANAGERID
+----------
+ 578875478
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@pe07:~/cs630/tables$ exit
+exit
+
+Script done on Sat 02 Mar 2019 01:29:15 AM EST

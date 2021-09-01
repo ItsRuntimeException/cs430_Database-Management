@@ -1,0 +1,109 @@
+Script started on Fri 01 Mar 2019 08:15:06 PM EST
+runlin@pe07:~/cs630/tables$ sh dbbook_mysql.sh
+This script assumes you have /home/runlin/.my.cnf set up with your mysql password
+Enter your mysql username: runlin
+Enter your mysql database: runlindb
+
+Creating Tables. runlin /home/runlin
+expect flights table to fail here
+ERROR 1067 (42000) at line 75: Invalid default value for 'arrives'
+redoing flights table using modified sql_mode (workaround)
+flights table created
+Created Tables, next will load table student.
+Loading student
+Bulk Loading Data. This may take a few moments.
+Loading faculty
+Loading class
+Loading enrolled
+Loading emp
+Loading dept
+Loading works
+Loading parts
+Loading suppliers
+Loading catalog
+Loading aircraft
+Loading employees
+Loading flights
+Loading certified
+Loading sailors
+Loading boats
+Loading sailors
+--------------
+insert into class values ('Artificial Intelligence',null,'UP328',null)
+--------------
+
+Done. The sample data is now loaded in mysql.
+runlin@pe07:~/cs630/tables$ sqp[Klplus runlin/runlin@//dbs3.cs.umb.edu/dbs32[K
+
+SQL*Plus: Release 12.1.0.2.0 Production on Fri Mar 1 20:16:17 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Fri Mar 01 2019 19:49:46 -05:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> @insertnu         selecty  * from dellt   pt
+  2  ;
+
+       DID DNAME		    BUDGET  MANAGERID
+---------- -------------------- ---------- ----------
+	 1 Hardware		1048572.12  141582651
+	 2 Operations		   4099101  287321212
+	 3 Legal		 222988.13  248965255
+	 4 Marketing		 538099.54  548977562
+	 5 Software		 400011.12  141582651
+	 6 Production		  12099101  578875478
+	 7 Shipping			 5  489456522
+
+7 rows selected.
+
+SQL> @insertnull.sql;
+
+1 row created.
+
+SQL> show * from dept                select * from dept;
+
+       DID DNAME		    BUDGET  MANAGERID
+---------- -------------------- ---------- ----------
+	 1 Hardware		1048572.12  141582651
+	 2 Operations		   4099101  287321212
+	 3 Legal		 222988.13  248965255
+	 4 Marketing		 538099.54  548977562
+	 5 Software		 400011.12  141582651
+	 6 Production		  12099101  578875478
+	 7 Shipping			 5  489456522
+1111122222 Converse Shoe Store	     10000
+
+8 rows selected.
+
+SQL> delete
+  2  from dept
+  3  where dept.did = 1111122222
+  4  ;
+
+1 row deleted.
+
+SQL> select * from dept;
+
+       DID DNAME		    BUDGET  MANAGERID
+---------- -------------------- ---------- ----------
+	 1 Hardware		1048572.12  141582651
+	 2 Operations		   4099101  287321212
+	 3 Legal		 222988.13  248965255
+	 4 Marketing		 538099.54  548977562
+	 5 Software		 400011.12  141582651
+	 6 Production		  12099101  578875478
+	 7 Shipping			 5  489456522
+
+7 rows selected.
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@pe07:~/cs630/tables$ exit
+exit
+
+Script done on Fri 01 Mar 2019 08:18:14 PM EST
