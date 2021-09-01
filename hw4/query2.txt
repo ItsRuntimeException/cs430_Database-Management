@@ -1,0 +1,34 @@
+Script started on Sun 28 Apr 2019 09:04:39 PM EDT
+runlin@pe07:~/cs630/hw4$ slqp[K[K[Kqlplus runlin/runlin@//dbs3.cs.umb.edu/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sun Apr 28 21:05:10 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sun Apr 28 2019 20:01:43 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> @query2.sql;
+SQL> 
+SQL> SELECT f.flno as Flight_num, f.distance as Distance_trvl, (f.arrives - f.departs) as timeDiff
+  2  FROM flights f
+  3  WHERE f.origin='Los-Angeles' AND f.destination='Chicago';
+
+FLIGHT_NUM DISTANCE_TRVL
+---------- -------------
+TIMEDIFF
+---------------------------------------------------------------------------
+	13	    1749
++000000000 12:00:00.000000
+
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@pe07:~/cs630/hw4$ exit
+exit
+
+Script done on Sun 28 Apr 2019 09:05:49 PM EDT

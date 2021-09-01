@@ -1,0 +1,56 @@
+Script started on Mon 29 Apr 2019 01:49:26 AM EDT
+runlin@pe07:~/cs630/hw4$ ls
+FindFlights.java  FindRestaurants.class  find.script		 JdbcCheckup_pe07.txt		  ojdbc6.jar  query2.txt	query3_mysql.txt
+FindFlights.txt   FindRestaurants.java	 JdbcCheckup_devsys.txt  mysql-connector-java-8.0.14.jar  query2.sql  query3_mysql.sql	README.txt
+runlin@pe07:~/cs630/hw4$ javac FindRestaurants.java
+runlin@pe07:~/cs630/hw4$ java -cp mysql-connector-java-8.0.14.jar:. FindRestaurants
+connected.
+Trying FindRestaurants.java...
+
+Enter an apartment listing number: 120
+SELECT distinct b.name, b.stars, b.review_count FROM yelp_db.business b, yelp_db.apartments a, yelp_db.category c  WHERE b.review_count >= 10 AND b.city = 'Las Vegas' AND b.state = 'NV' AND b.id = c.business_id AND c.category = 'Restaurants'  AND a.listing = '120' AND 200 >= (select ST_Distance_Sphere( point(a.longitude,a.latitude), point(b.longitude,b.latitude)) from dual)
+
+Business Name = Rachel's Kitchen
+Rating = 3.5
+Review Count = 252
+
+Business Name = LULU Hawaiian BBQ 2
+Rating = 3.5
+Review Count = 56
+
+Business Name = Arby's
+Rating = 2.5
+Review Count = 35
+
+Business Name = Port of Subs
+Rating = 3.0
+Review Count = 34
+
+Business Name = Timbers - Durango
+Rating = 2.5
+Review Count = 90
+
+Business Name = Market Grille Cafe
+Rating = 4.0
+Review Count = 428
+
+Business Name = El Pollo Loco
+Rating = 2.5
+Review Count = 62
+
+Business Name = Babystacks Cafe
+Rating = 4.0
+Review Count = 437
+
+Business Name = China One
+Rating = 3.5
+Review Count = 200
+
+Business Name = Popeyes Louisiana Kitchen
+Rating = 2.0
+Review Count = 88
+
+runlin@pe07:~/cs630/hw4$ exit
+exit
+
+Script done on Mon 29 Apr 2019 01:50:00 AM EDT

@@ -1,0 +1,62 @@
+Script started on Mon 29 Apr 2019 06:04:03 PM EDT
+runlin@pe07:~/cs630/hw4$ javac EmailList.java EditUser.java
+runlin@pe07:~/cs630/hw4$ java -cp ojdbc6.jar:. EmailList
+Please enter information for connection to the database
+Using Oracle (o) or MySql (m)? o
+Oracle username: runlin
+Oracle password: runlin
+use canned Oracle connection string (y/n): y
+host: dbs3.cs.umb.edu
+port (often 1521): 1521
+sid (site id): dbs3
+using connection string: jdbc:oracle:thin:@dbs3.cs.umb.edu:1521:dbs3
+Connecting to the database...using connection string: jdbc:oracle:thin:@dbs3.cs.umb.edu:1521:dbs3
+Connecting to the database...connected.
+To add a member to the email list, enter name and email as follows:
+Enter firstName: Sue
+Enter lastName: Wong
+Enter email: swong@gmail.com
+This email address already exists.Please enter another email address.
+runlin@pe07:~/cs630/hw4$ java -cp ojdbc6.jar:. EditUser.[K
+Please enter information for connection to the database
+Using Oracle (o) or MySql (m)? o
+Oracle username: runlin
+use canned Oracle connection string (y/n): y
+using connection string: jdbc:oracle:thin:@dbs3.cs.umb.edu:1521:dbs3
+Connecting to the database...using connection string: jdbc:oracle:thin:@dbs3.cs.umb.edu:1521:dbs3
+Connecting to the database...connected.
+To edit a member in the email list, enter the email below.
+Email search: swong@gmail.com
+User's first name: Sue
+User's last name: Wong
+Selected this email's user, entering edit mode...
+
+New firstName: Susan
+New lastName: 
+Now the user's name is...
+First name: Susan
+Last name: Wong
+runlin@pe07:~/cs630/hw4$ java -cp ojdbc6.jar:. EditUser
+Please enter information for connection to the database
+Using Oracle (o) or MySql (m)? o
+Oracle username: runlin
+use canned Oracle connection string (y/n): y
+using connection string: jdbc:oracle:thin:@dbs3.cs.umb.edu:1521:dbs3
+Connecting to the database...using connection string: jdbc:oracle:thin:@dbs3.cs.umb.edu:1521:dbs3
+Connecting to the database...connected.
+To edit a member in the email list, enter the email below.
+Email search: swong@gmail.com
+User's first name: Susan
+User's last name: Wong
+Selected this email's user, entering edit mode...
+
+New firstName: 
+New lastName: 
+No change to first and last name.
+Now the user's name is...
+First name: Susan
+Last name: Wong
+runlin@pe07:~/cs630/hw4$ exit
+exit
+
+Script done on Mon 29 Apr 2019 06:06:59 PM EDT

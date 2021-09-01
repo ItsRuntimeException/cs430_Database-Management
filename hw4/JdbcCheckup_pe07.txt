@@ -1,0 +1,36 @@
+Script started on Sun 28 Apr 2019 06:31:20 PM EDT
+runlin@pe07:~/cs630/jdbc$ javac JdbcCheckup.java
+runlin@pe07:~/cs630/jdbc$ java -cp ojdbc6.jar:. JdbcCheckup
+Please enter information to test connection to the database
+Using Oracle (o), MySql (m) or H2 (h)? o
+user: runlin
+password: runlin
+host: dbs3.cs.umb.edu
+port (often 1521): 1521
+sid (site id): dbs3
+using connection string: jdbc:oracle:thin:@dbs3.cs.umb.edu:1521:dbs3
+Connecting to the database...connected.
+Hello World!        
+Your JDBC installation is correct.
+runlin@pe07:~/cs630/jdbc$ java -cp mysql-connector-java-8.0.14.jar:. JdbcCheckup
+Please enter information to test connection to the database
+Using Oracle (o), MySql (m) or H2 (h)? m
+user: runlin
+password: runlin
+host: localc host
+port (often 3306): 3306
+using connection string: jdbc:mysql://localhost:3306/runlindb
+Connecting to the database...connected.
+Hello World!
+Your JDBC installation is correct.
+runlin@pe07:~/cs630/jdbc$ java -cp hw[K2.jar;.[K[K:/.[K[K. JdbcCg[Kheckup
+Please enter information to test connection to the database
+Using Oracle (o), MySql (m) or H2 (h)? h
+using connection string: jdbc:h2:~/test
+Connecting to the database...connected.
+Hello World!
+Your JDBC installation is correct.
+runlin@pe07:~/cs630/jdbc$ exit
+exit
+
+Script done on Sun 28 Apr 2019 06:34:39 PM EDT

@@ -1,0 +1,49 @@
+Script started on Sun 28 Apr 2019 11:09:27 PM EDT
+runlin@pe07:~/cs630/jdbc$ java -cp ojdbc6.jar:. FindFlights
+connected.
+Trying FindFlight.java...
+
+Flight Origin: Los-Angeles
+Flight Destination: Honolulu
+SELECT f.flno, f.distance, (f.arrives - f.departs) as timeDiff FROM flights f  WHERE f.origin='Los-Angeles' AND f.destination='Honolulu'
+
+flno = 33
+distance = 2551
+timeDiff = 0 2:0:0.0
+
+
+flno = 34
+distance = 2551
+timeDiff = 0 2:33:0.0
+
+
+runlin@pe07:~/cs630/jdbc$ java -cp ojdbc6.jar:. FindFlights
+connected.
+Trying FindFlight.java...
+
+Flight Origin: Los-Angeles
+Flight Destination: Sydney
+SELECT f.flno, f.distance, (f.arrives - f.departs) as timeDiff FROM flights f  WHERE f.origin='Los-Angeles' AND f.destination='Sydney'
+
+flno = 7
+distance = 7487
+timeDiff = 1 7:40:0.0
+
+
+runlin@pe07:~/cs630/jdbc$ java -cp ojdbc6.jar:. FindFlights
+connected.
+Trying FindFlight.java...
+
+Flight Origin: Madison
+Flight Destination: Chicago
+SELECT f.flno, f.distance, (f.arrives - f.departs) as timeDiff FROM flights f  WHERE f.origin='Madison' AND f.destination='Chicago'
+
+flno = 4884
+distance = 84
+timeDiff = 0 0:50:0.0
+
+
+runlin@pe07:~/cs630/jdbc$ exit
+exit
+
+Script done on Sun 28 Apr 2019 11:10:30 PM EDT
