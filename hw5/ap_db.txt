@@ -1,0 +1,19 @@
+create table apartmentdb
+(
+    listing INTEGER,
+    neighborhood VARCHAR(20),
+    address VARCHAR(30),
+    city VARCHAR(20),
+    state VARCHAR(2),
+    postal_code VARCHAR(5),
+    latitude NUMBER(6,4),
+    longitude NUMBER(7,4),
+    PRIMARY KEY (listing)
+);
+
+mysql> select * from rented_apartments;
++---------+--------------+----------------+-----------+-------+-------------+----------+-----------+
+| listing | neighborhood | address        | city      | state | postal_code | latitude | longitude |
++---------+--------------+----------------+-----------+-------+-------------+----------+-----------+
+|     120 | Centennial   | 7050 N Durango | Las Vegas | NV    | 89149       |  36.2889 |  -115.287 |
++---------+--------------+----------------+-----------+-------+-------------+----------+-----------+

@@ -1,0 +1,154 @@
+Script started on Sun 05 May 2019 08:05:59 PM EDT
+runlin@pe07:~/cs630/hw5$ exitsqlplus runlin/runlin@//dbs3.cs.umb.edu/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sun May 5 20:06:02 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sun May 05 2019 19:46:27 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> set echo on
+SQL> @drop  _apartments dbs .sql
+SQL> drop table apartments;
+
+Table dropped.
+
+SQL> 
+SQL> drop table rented_apartments;
+
+Table dropped.
+
+SQL> @d create_apartmentdb.sql
+SQL> create table apartments as (
+  2  	 SELECT *
+  3  	 FROM yelp_db.apartments
+  4  );
+
+Table created.
+
+SQL> alter table apartments add PRIMARY KEY(listing);
+
+Table altered.
+
+SQL> 
+SQL> create table rented_apartments as
+  2  (
+  3  	 SELECT *
+  4  	 FROM yelp_db.apartments
+  5  	 WHERE 1 = 0
+  6  );
+
+Table created.
+
+SQL> alter table rented_apartments add PRIMARY KEY(listing);
+
+Table altered.
+
+SQL> w select count* (*) gf    fropm    m apartments;
+
+  COUNT(*)
+----------
+       215
+
+SQL> select count(*) from rented( _apartments;
+
+  COUNT(*)
+----------
+	 0
+
+SQL> ex9 it
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@pe07:~/cs630/hw5$ javac DeleteListing.java
+runlin@pe07:~/cs630/hw5$ java -cp ojdbc6.k[Kjar:. Delete [KListing
+CONNECTED...
+
+Trying DeleteListing.java...
+
+Enter an apartment listing number: 120
+INSERT INTO rented_apartments (SELECT * FROM apartments a WHERE a.listing = '120')
+
+listing inserted into rented_apartments table...
+
+DELETE FROM apartments a WHERE a.listing = '120'
+
+listing deleted from apartments table...
+
+runlin@pe07:~/cs630/hw5$ java -cp ojdbc6.jar:. DeleteListing[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[11Pc DeleteListing.javasqlplus runlin/runlin@//dbs3.cs.umb.edu/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sun May 5 20:07:24 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sun May 05 2019 19:48:58 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> select count(*) from apartments;
+
+  COUNT(*)
+----------
+       214
+
+SQL> select count*^H(*)        (*) from rented_apartments;
+
+  COUNT(*)
+----------
+	 1
+
+SQL> select a.listing, a.neighborhood, a.address, a.city, a.sate   tate, a.postal           e from rented_apartments a;
+
+   LISTING
+----------
+NEIGHBORHOOD
+--------------------------------------------------------------------------------
+ADDRESS
+--------------------------------------------------------------------------------
+CITY
+--------------------------------------------------------------------------------
+STATE
+--------------------------------------------------------------------------------
+       120
+Centennial
+7050 N Durango
+
+   LISTING
+----------
+NEIGHBORHOOD
+--------------------------------------------------------------------------------
+ADDRESS
+--------------------------------------------------------------------------------
+CITY
+--------------------------------------------------------------------------------
+STATE
+--------------------------------------------------------------------------------
+Las Vegas
+NV
+
+
+SQL> ^[[A^[[A        select a.listing.  from a rented. _apartments;
+select a.listing from rented_apartments
+       *
+ERROR at line 1:
+ORA-00904: "A"."LISTING": invalid identifier
+
+
+SQL> ^[[A^[[A        select a./ listing from rented_apartments a;
+
+   LISTING
+----------
+       120
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@pe07:~/cs630/hw5$ exit
+exit
+
+Script done on Sun 05 May 2019 08:09:55 PM EDT

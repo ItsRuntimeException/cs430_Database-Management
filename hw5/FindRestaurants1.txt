@@ -1,0 +1,54 @@
+Script started on Sun 05 May 2019 10:11:49 PM EDT
+runlin@pe07:~/cs630/hw5$ javac FindRestaurants1.java
+runlin@pe07:~/cs630/hw5$ java -cp ojdbc6.jar.[K:. FindRestaurants1
+CONNECTED...
+
+Trying FindRestaurants1.java...
+
+Enter an apartment listing number: 120
+SELECT distinct b.name, b.stars, b.review_count FROM yelp_db.business b, yelp_db.apartments a, yelp_db.category c  WHERE b.review_count >= 10 AND b.city = 'Las Vegas' AND b.state = 'NV' AND b.id = c.business_id AND c.category = 'Restaurants'  AND a.listing = '120' AND 200 >= (select geo_distance(a.longitude, a.latitude, b.longitude, b.latitude) from dual)
+
+Business Name = Port of Subs
+Rating = 3.0
+Review Count = 34
+
+Business Name = China One
+Rating = 3.5
+Review Count = 200
+
+Business Name = Timbers - Durango
+Rating = 2.5
+Review Count = 90
+
+Business Name = Market Grille Cafe
+Rating = 4.0
+Review Count = 428
+
+Business Name = Arby's
+Rating = 2.5
+Review Count = 35
+
+Business Name = Babystacks Cafe
+Rating = 4.0
+Review Count = 437
+
+Business Name = Rachel's Kitchen
+Rating = 3.5
+Review Count = 252
+
+Business Name = Popeyes Louisiana Kitchen
+Rating = 2.0
+Review Count = 88
+
+Business Name = LULU Hawaiian BBQ 2
+Rating = 3.5
+Review Count = 56
+
+Business Name = El Pollo Loco
+Rating = 2.5
+Review Count = 62
+
+runlin@pe07:~/cs630/hw5$ exit
+exit
+
+Script done on Sun 05 May 2019 10:12:29 PM EDT

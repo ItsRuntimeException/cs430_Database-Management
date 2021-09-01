@@ -1,0 +1,74 @@
+Script started on Mon 06 May 2019 01:00:14 AM EDT
+runlin@pe07:~/cs630/hw5$ exitclearsqlplus runlin/runlin@//dbs3.cs.umb.edu/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon May 6 01:00:16 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Mon May 06 2019 00:41:20 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> set echo on
+SQL> select count(*) from apartments;
+
+  COUNT(*)
+----------
+       215
+
+SQL> select count() *) from rented_apartments;
+
+  COUNT(*)
+----------
+	 0
+
+SQL> @sp_delete_listing( .sql
+SQL> CREATE OR REPLACE PROCEDURE delete_listing(listing NUMBER) IS
+  2   num NUMBER;
+  3  BEGIN
+  4  	 num := listing;
+  5  	 INSERT INTO rented_apartments
+  6  	 SELECT * FROM apartments A
+  7  	 WHERE A.listing = num;
+  8  
+  9  	 DELETE FROM apartments A
+ 10  	 WHERE A.listing = num;
+ 11  END;
+ 12  /
+
+Procedure created.
+
+SQL> show errors;
+No errors.
+SQL> 
+SQL> CALL delete_listing(120);
+
+Call completed.
+
+SQL> select count(*) from apartments;
+
+  COUNT(*)
+----------
+       214
+
+SQL> select count(*) from a rented_apartments;
+
+  COUNT(*)
+----------
+	 1
+
+SQL> select a.listing from rented_apartments a;
+
+   LISTING
+----------
+       120
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@pe07:~/cs630/hw5$ exit
+exit
+
+Script done on Mon 06 May 2019 01:01:51 AM EDT

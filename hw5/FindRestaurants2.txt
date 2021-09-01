@@ -1,0 +1,32 @@
+Script started on Sun 05 May 2019 11:46:18 PM EDT
+runlin@pe07:~/cs630/hw5$ javac FindRestaurants2.java
+runlin@pe07:~/cs630/hw5$ java -cp ojdbc6.jar:. FindRestaurants2
+CONNECTED...
+
+Trying FindRestaurants2.java...
+
+Enter an apartment listing number(ex: 25): 25
+Enter a business category(ex: Restaurants): Restaurants
+SELECT apartment_stats(25, 'Restaurants') from dual
+
+executing query...
+
+Count = 10
+
+runlin@pe07:~/cs630/hw5$ java -cp ojdbc6.jar:. FindRestaurants2
+CONNECTED...
+
+Trying FindRestaurants2.java...
+
+Enter an apartment listing number(ex: 25): 25
+Enter a business category(ex: Restaurants): Grocery
+SELECT apartment_stats(25, 'Grocery') from dual
+
+executing query...
+
+Count = 10
+
+runlin@pe07:~/cs630/hw5$ exit
+exit
+
+Script done on Sun 05 May 2019 11:47:43 PM EDT

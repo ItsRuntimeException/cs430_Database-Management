@@ -1,0 +1,15 @@
+SET SERVEROUTPUT ON;
+DECLARE
+    long1 NUMBER(9,6);
+    lat1 NUMBER(9,6);
+    long2 NUMBER(9,6);
+    lat2 NUMBER(9,6);
+    DIST NUMBER(9,6);
+BEGIN
+    long1 := 151.20208;
+    lat1 := -33.883741;
+    long2 := 151.195986;
+    lat2 := -33.87266;
+    DIST := geo_distance(long1, lat1, long2, lat2);
+    DBMS_OUTPUT.PUT_LINE('DISTANCE = ' || DIST); 
+END;

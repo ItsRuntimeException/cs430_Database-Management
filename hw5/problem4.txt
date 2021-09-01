@@ -1,0 +1,35 @@
+Script started on Sun 05 May 2019 11:23:34 PM EDT
+runlin@pe07:~/cs630/hw5$ exitsqlplus runlin/runlin@//dbs3.cs.umb.edu/dbs3
+
+SQL*Plus: Release 12.1.0.2.0 Production on Sun May 5 23:23:36 2019
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Sun May 05 2019 23:05:06 -04:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> @sf_apt_stats.sql
+
+Function created.
+
+No errors.
+
+APARTMENT_STATS(25,'RESTAURANTS')
+---------------------------------
+			       10
+
+
+APARTMENT_STATS(25,'GROCERY')
+-----------------------------
+			   10
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+runlin@pe07:~/cs630/hw5$ exit
+exit
+
+Script done on Sun 05 May 2019 11:23:59 PM EDT
